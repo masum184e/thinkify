@@ -6,7 +6,7 @@ const Banner = () => {
         <>
             <Grid minHeight="90vh" maxWidth="1280px" mx="auto" container spacing={2} justifyContent="center" alignItems="center" >
                 <Grid item xs={6} >
-                    <Box sx={{ display: "flex", gap: "5px", color: "#797979" }}  >
+                    <Box sx={{ display: "flex", gap: "5px", color: "#1b2e35" }}  >
                         <ConnectWithoutContactIcon />
                         <Typography variant="body1" >Connecting Ideas, Inspiring Perspectives</Typography>
                     </Box>
@@ -30,12 +30,12 @@ const Banner = () => {
                         </form>
                     </Box>
                     <Stack direction="row" spacing={1}>
-                        <Chip label="primary" sx={{ backgroundColor: "#59e3a7", color: "white" }} />
-                        <Chip label="success" sx={{ backgroundColor: "#59e3a7", color: "white" }} />
-                        <Chip label="primary" sx={{ backgroundColor: "#59e3a7", color: "white" }} />
-                        <Chip label="success" sx={{ backgroundColor: "#59e3a7", color: "white" }} />
-                        <Chip label="primary" sx={{ backgroundColor: "#59e3a7", color: "white" }} />
-                        <Chip label="success" sx={{ backgroundColor: "#59e3a7", color: "white" }} />
+                        <Chip label="primary" sx={{ backgroundColor: "#59e3a7", color: "#1b2e35" }} />
+                        <Chip label="success" sx={{ backgroundColor: "#59e3a7", color: "#1b2e35" }} />
+                        <Chip label="primary" sx={{ backgroundColor: "#59e3a7", color: "#1b2e35" }} />
+                        <Chip label="success" sx={{ backgroundColor: "#59e3a7", color: "#1b2e35" }} />
+                        <Chip label="primary" sx={{ backgroundColor: "#59e3a7", color: "#1b2e35" }} />
+                        <Chip label="success" sx={{ backgroundColor: "#59e3a7", color: "#1b2e35" }} />
                     </Stack>
                 </Grid>
                 <Grid item xs={6}>
