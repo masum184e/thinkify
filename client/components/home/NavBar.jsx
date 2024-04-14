@@ -12,7 +12,7 @@ export default function NavBar() {
                                 <Typography
                                     sx={{
                                         fontFamily: "Platypi",
-                                        color: "#59e3a7"
+                                        color: "#1b2e35"
                                     }}
                                     variant="h3"
                                     component="h3"
