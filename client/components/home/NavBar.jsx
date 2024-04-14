@@ -20,8 +20,8 @@ export default function NavBar() {
                             </Box>
                             <Box >
                                 <ButtonGroup >
-                                    <Button sx={{ backgroundColor: "#59e3a7", color: "white" }}>Join</Button>
-                                    <Button sx={{ backgroundColor: "#59e3a7", color: "white" }}>Login</Button>
+                                    <Button sx={{ backgroundColor: "#1b2e35", color: "white" }}>Join</Button>
+                                    <Button sx={{ backgroundColor: "#1b2e35", color: "white" }}>Login</Button>
                                 </ButtonGroup>
                             </Box>
                         </Box>
