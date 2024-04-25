@@ -13,17 +13,19 @@ const Banner = () => {
                     <Typography
                         sx={{
                             fontFamily: "Platypi",
-                            color: "#1b2e35"
+                            color: "#1b2e35",
+                            margin: "5px 0 30px 0"
                         }}
                         variant="h1"
                         component="h1"
                     >Thinkify</Typography>
-                    <Box mb={4} mt={6}>
+                    <Typography sx={{ color: "#797979" }} variant="body1">At Thinkify, our mission is to provide a dynamic and intuitive platform that empowers individuals to transform their ideas into actionable tasks.</Typography>
+                    <Box sx={{ margin: "30px 0 35px 0" }}>
                         <form action="" method="post" >
                             <TextField
                                 placeholder="Search Here ..."
                                 sx={{
-                                    width: '75%'
+                                    width: '75%',
                                 }}
 
                             />
