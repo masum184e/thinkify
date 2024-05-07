@@ -6,6 +6,9 @@ import Profile from "../pages/Profile";
 import MyPost from "../pages/MyPost";
 import AddPost from "../pages/AddPost";
 import UserSideBar from "../layouts/UserSideBar";
+import TaskManager from "../pages/TaskManager";
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const router = createBrowserRouter([
     {
@@ -26,6 +29,15 @@ const router = createBrowserRouter([
     }, {
         path: "/add-post",
         element: <UserSideBar><AddPost /></UserSideBar>
+    }, {
+        path: "/task-management",
+        element: <>
+            <DndProvider backend={HTML5Backend}>
+                <UserSideBar>
+                    <TaskManager />
+                </UserSideBar>
+            </DndProvider >
+        </>
     }
 ])
 

@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import ListAltIcon from '@mui/icons-material/ListAlt';
+import AddTaskIcon from '@mui/icons-material/AddTask';
 
 import NavBar from "../../components/home/NavBar";
 import Footer from "../../components/home/footer/Footer";
@@ -24,7 +25,11 @@ const UserSideBar = ({ children }) => {
             label: "Add Post",
             url: "/add-post",
             icon: <AddBoxIcon />
-        },
+        }, {
+            label: "Task Manager",
+            url: "/task-management",
+            icon: <AddTaskIcon />
+        }
     ];
 
     const location = useLocation();
@@ -61,7 +66,9 @@ const UserSideBar = ({ children }) => {
                         ))}
                     </List>
                 </Drawer>
-                {children}
+                <Box sx={{width:"100%",margin:"10px"}}>
+                    {children}
+                </Box>
             </Box>
             <Footer />
         </div>
