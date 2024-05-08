@@ -21,7 +21,7 @@ const MyPost = () => {
     ]
 
     return (
-        <Box m={2} sx={{ width: "100%" }}>
+        <Box sx={{ width: "100%" }}>
             <TableContainer component={Paper} sx={{ width: "100%" }}>
                 <Table aria-label="simple table" fullWidth >
                     <TableHead sx={{ backgroundColor: "#59e3a7" }}>
