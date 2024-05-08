@@ -8,7 +8,7 @@ const AddPost = () => {
     const [value, setValue] = useState("Initial value");
 
     return (
-        <Box m={2} sx={{ width: "100%" }}>
+        <Box sx={{ width: "100%" }}>
             <Box sx={{ display: "flex", gap: "10px" }}>
                 <Box sx={{ flex: "1" }}>
                     <Box>
