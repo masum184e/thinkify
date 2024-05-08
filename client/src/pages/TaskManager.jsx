@@ -38,17 +38,32 @@ const TaskManager = () => {
                 {/* <Typography variant="h2" textAlign="center" sx={{ mb: "16px", fontWeight: "bold" }}>Coordination of Work</Typography> */}
                 <Grid container spacing={3}>
                     <Grid item xs>
-                        <Box bgcolor="primary.main" color="primary.contrastText" p={2} sx={{ borderRadius: '5px', }}>
+                        <Box sx={{
+                            borderRadius: '5px',
+                            p: 2,
+                            backgroundColor: "#59e3a7"
+                        }}
+                        >
                             <TaskStatus status="todo" onDrop={handleDropTodo} />
                         </Box>
                     </Grid>
                     <Grid item xs>
-                        <Box bgcolor="secondary.main" color="secondary.contrastText" p={2} sx={{ borderRadius: '5px', }}>
+                        <Box sx={{
+                            borderRadius: '5px',
+                            p: 2,
+                            backgroundColor: "#00844b"
+                        }}
+                        >
                             <TaskStatus status="ongoing" onDrop={handleDropOngoing} />
                         </Box>
                     </Grid>
                     <Grid item xs>
-                        <Box bgcolor="warning.main" color="warning.contrastText" p={2} sx={{ borderRadius: '5px', }}>
+                        <Box sx={{
+                            borderRadius: '5px',
+                            p: 2,
+                            backgroundColor: "#28483a"
+                        }}
+                        >
                             <TaskStatus status="completed" onDrop={handleDropCompleted} />
                         </Box>
                     </Grid>
