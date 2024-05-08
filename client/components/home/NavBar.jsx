@@ -8,17 +8,19 @@ export default function NavBar() {
                 <Toolbar>
                     <Box sx={{ maxWidth: "1280px", width: "100%", marginLeft: "auto", marginRight: "auto" }}>
                         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                            <Box sx={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
-                                <img src="./images/favicon.ico" width="55" alt="Thinkify" />
-                                <Typography
-                                    sx={{
-                                        fontFamily: "Platypi",
-                                        color: "#1b2e35"
-                                    }}
-                                    variant="h3"
-                                    component="h3"
-                                >Thinkify</Typography>
-                            </Box>
+                            <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }} >
+                                <Box sx={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
+                                    <img src="./images/favicon.ico" width="55" alt="Thinkify" />
+                                    <Typography
+                                        sx={{
+                                            fontFamily: "Platypi",
+                                            color: "#1b2e35"
+                                        }}
+                                        variant="h3"
+                                        component="h3"
+                                    >Thinkify</Typography>
+                                </Box>
+                            </Link>
                             <Box >
                                 <ButtonGroup >
                                     <Link to="/registration"><Button sx={{ backgroundColor: "#1b2e35", color: "white", "&:hover": { backgroundColor: "#1b2e35" } }}>Join</Button></Link>
