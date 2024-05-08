@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import ListAltIcon from '@mui/icons-material/ListAlt';
-import AddTaskIcon from '@mui/icons-material/AddTask';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
@@ -27,10 +26,6 @@ const UserSideBar = ({ children }) => {
             label: "Add Post",
             url: "/add-post",
             icon: <AddBoxIcon />
-        }, {
-            label: "Add Assignment",
-            url: "/add-assignment",
-            icon: <AddTaskIcon />
         }, {
             label: "Add Product",
             url: "/add-product",
@@ -76,7 +71,7 @@ const UserSideBar = ({ children }) => {
                         ))}
                     </List>
                 </Drawer>
-                <Box sx={{width:"100%",margin:"10px"}}>
+                <Box sx={{ width: "100%", margin: "10px" }}>
                     {children}
                 </Box>
             </Box>
