@@ -1,15 +1,26 @@
 import { Box, Typography, TextField, FormControlLabel, Checkbox, Button, Divider } from "@mui/material"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from '@mui/icons-material/Google';
 
 const Login = () => {
+    const navigate = useNavigate();
     const handleSubmit = e => {
         e.preventDefault();
+        navigate("/profile")
     }
     return (
         <>
             <Box height="100vh" sx={{ display: "flex" }}>
-                <Box sx={{ flex: "1" }}></Box>
+                <Box sx={{
+                    flex: "1",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}>
+                    <Box>
+                        <img src="/images/auth.jpg" alt="" />
+                    </Box>
+                </Box>
                 <Box sx={{ flex: 1, backgroundColor: "#1b2e35", display: "flex", alignItems: "center" }}>
                     <Box width={1 / 2} mx="auto" my="auto" >
                         <Typography variant="h2" component="h2" sx={{ color: "white", fontSize: "2.25rem", fontWeight: "bold" }}>Welcome Back</Typography>
