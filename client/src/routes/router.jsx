@@ -9,6 +9,8 @@ import UserSideBar from "../layouts/UserSideBar";
 import TaskManager from "../pages/TaskManager";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import AddAssignment from "../pages/AddAssignment";
+import AddProduct from "../pages/AddProduct";
 
 const router = createBrowserRouter([
     {
@@ -38,6 +40,12 @@ const router = createBrowserRouter([
                 </UserSideBar>
             </DndProvider >
         </>
+    }, {
+        path: "/add-assignment",
+        element: <UserSideBar><AddAssignment /></UserSideBar>
+    }, {
+        path: "/add-product",
+        element: <UserSideBar><AddProduct /></UserSideBar>
     }
 ])
 
