@@ -7,6 +7,8 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import AddTaskIcon from '@mui/icons-material/AddTask';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 import NavBar from "../../components/home/NavBar";
 import Footer from "../../components/home/footer/Footer";
@@ -26,9 +28,17 @@ const UserSideBar = ({ children }) => {
             url: "/add-post",
             icon: <AddBoxIcon />
         }, {
+            label: "Add Assignment",
+            url: "/add-assignment",
+            icon: <AddTaskIcon />
+        }, {
+            label: "Add Product",
+            url: "/add-product",
+            icon: <AddShoppingCartIcon />
+        }, {
             label: "Task Manager",
             url: "/task-management",
-            icon: <AddTaskIcon />
+            icon: <PlaylistAddCheckIcon />
         }
     ];
 
