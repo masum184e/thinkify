@@ -10,9 +10,15 @@ Thinkify is a vibrant space where people from diverse backgrounds and interests 
 
 # How to Run
 ```
+git clone https://github.com/masum184e/thinkify.git
+
+# BACKEND
+cd server
 npm install
 npx nodemon index.js
 
+# FRONTEND
+cd ../client
 npm install
 npm run dev
 ```
