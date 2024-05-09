@@ -1,8 +1,9 @@
 # Thinkify
+Thinkify is a vibrant space where people from diverse backgrounds and interests come together to engage in meaningful conversations, fostering an environment rich in idea exchange, knowledge sharing, and diverse experiences.
 
 # Preview
 <img src="/preview.png">
-<a href="">Live View</a> | <a href="">Live API</a> | <a href="">Postman</a>
+<a href="">Live Preview</a> | <a href="">Live API</a> | <a href="">Postman</a>
 
 # Requirements
 [Install Node On Your Device](https://nodejs.org/)
