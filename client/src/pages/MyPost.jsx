@@ -31,7 +31,6 @@ const MyPost = () => {
                             <TableCell sx={{ fontWeight: "bold" }}>Like</TableCell>
                             <TableCell sx={{ fontWeight: "bold" }}>Dislike</TableCell>
                             <TableCell sx={{ fontWeight: "bold" }}>Comment</TableCell>
-                            <TableCell sx={{ fontWeight: "bold" }}>Comment</TableCell>
                             <TableCell sx={{ fontWeight: "bold" }}>Visibility</TableCell>
                             <TableCell sx={{ fontWeight: "bold" }}>Action</TableCell>
                         </TableRow>
@@ -47,7 +46,6 @@ const MyPost = () => {
                                 <TableCell >{row.calories}</TableCell>
                                 <TableCell >{row.fat}</TableCell>
                                 <TableCell >{row.carbs}</TableCell>
-                                <TableCell >{row.protein}</TableCell>
                                 <TableCell ><VisibilityOffIcon /></TableCell>
                                 <TableCell >
                                     <Box sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
