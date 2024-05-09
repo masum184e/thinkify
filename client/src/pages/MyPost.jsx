@@ -60,9 +60,9 @@ const data=[
                             >
                                 <TableCell >{index + 1}</TableCell>
                                 <TableCell >{item.title}</TableCell>
-                                <TableCell >{item.like}</TableCell>
-                                <TableCell >{item.dislike}</TableCell>
-                                <TableCell >{item.comment}</TableCell>
+                                <TableCell >{item.likes}</TableCell>
+                                <TableCell >{item.dislikes}</TableCell>
+                                <TableCell >{item.comments}</TableCell>
                                 <TableCell ><VisibilityOffIcon /></TableCell>
                                 <TableCell >
                                     <Box sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
