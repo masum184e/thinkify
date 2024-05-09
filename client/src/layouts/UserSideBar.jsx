@@ -8,6 +8,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 import NavBar from "../../components/home/NavBar";
 import Footer from "../../components/home/footer/Footer";
@@ -34,6 +35,10 @@ const UserSideBar = ({ children }) => {
             label: "Task Manager",
             url: "/task-management",
             icon: <PlaylistAddCheckIcon />
+        }, {
+            label: "Setting",
+            url: "/setting",
+            icon: <SettingsIcon />
         }
     ];
 
