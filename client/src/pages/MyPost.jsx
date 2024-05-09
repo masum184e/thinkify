@@ -12,13 +12,30 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
 const MyPost = () => {
-    const rows = [
-        { name: 'Frozen yoghurt', calories: 159, fat: 6.0, carbs: 24, protein: 4.0 },
-        { name: 'Ice cream sandwich', calories: 237, fat: 9.0, carbs: 37, protein: 4.3 },
-        { name: 'Eclair', calories: 262, fat: 16.0, carbs: 24, protein: 6.0 },
-        { name: 'Cupcake', calories: 305, fat: 3.7, carbs: 67, protein: 4.3 },
-        { name: 'Gingerbread', calories: 356, fat: 16.0, carbs: 49, protein: 3.9 }
-    ]
+const data=[
+    {
+      "title": "The Rise of Artificial Intelligence: A Closer Look",
+      "likes": 120,
+      "dislikes": 10,
+      "comments": 25
+    },{
+      "title": "Climate Change: Urgent Actions Needed",
+      "likes": 75,
+      "dislikes": 5,
+      "comments": 15
+    },{
+      "title": "The Impact of Social Media on Mental Health",
+      "likes": 200,
+      "dislikes": 20,
+      "comments": 40
+    },{
+      "title": "Revolutionizing Healthcare with Technology",
+      "likes": 50,
+      "dislikes": 2,
+      "comments": 10
+    }
+  ]
+  
 
     return (
         <Box sx={{ width: "100%" }}>
@@ -26,26 +43,26 @@ const MyPost = () => {
                 <Table aria-label="simple table" fullWidth >
                     <TableHead sx={{ backgroundColor: "#59e3a7" }}>
                         <TableRow>
-                            <TableCell sx={{ fontWeight: "bold" }}>#</TableCell>
-                            <TableCell sx={{ fontWeight: "bold" }}>Title</TableCell>
-                            <TableCell sx={{ fontWeight: "bold" }}>Like</TableCell>
-                            <TableCell sx={{ fontWeight: "bold" }}>Dislike</TableCell>
-                            <TableCell sx={{ fontWeight: "bold" }}>Comment</TableCell>
-                            <TableCell sx={{ fontWeight: "bold" }}>Visibility</TableCell>
-                            <TableCell sx={{ fontWeight: "bold" }}>Action</TableCell>
+                            <TableCell sx={{ fontWeight: "bold",color:"white" }}>#</TableCell>
+                            <TableCell sx={{ fontWeight: "bold",color:"white" }}>Title</TableCell>
+                            <TableCell sx={{ fontWeight: "bold",color:"white" }}>Like</TableCell>
+                            <TableCell sx={{ fontWeight: "bold",color:"white" }}>Dislike</TableCell>
+                            <TableCell sx={{ fontWeight: "bold",color:"white" }}>Comment</TableCell>
+                            <TableCell sx={{ fontWeight: "bold",color:"white" }}>Visibility</TableCell>
+                            <TableCell sx={{ fontWeight: "bold",color:"white" }}>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row, index) => (
+                        {data.map((item, index) => (
                             <TableRow
-                                key={row.name}
+                                key={item.title}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <TableCell >{index + 1}</TableCell>
-                                <TableCell >{row.name}</TableCell>
-                                <TableCell >{row.calories}</TableCell>
-                                <TableCell >{row.fat}</TableCell>
-                                <TableCell >{row.carbs}</TableCell>
+                                <TableCell >{item.title}</TableCell>
+                                <TableCell >{item.like}</TableCell>
+                                <TableCell >{item.dislike}</TableCell>
+                                <TableCell >{item.comment}</TableCell>
                                 <TableCell ><VisibilityOffIcon /></TableCell>
                                 <TableCell >
                                     <Box sx={{ display: "flex", alignItems: "center", gap: "5px" }}>
