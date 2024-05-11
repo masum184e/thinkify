@@ -13,7 +13,15 @@ const PORT = process.env.PORT;
 const DATABASE_URL = process.env.DATABASE_URL;
 const DATABASE_NAME = process.env.DATABASE_NAME;
 
-app.use(cors());
+app.use(
+    cors({
+        origin: [
+            "http://localhost:5173/",
+            "https://thinkify.vercel.app/",
+        ],
+        credentials: true,
+    })
+);
 databaseConnection(DATABASE_URL, DATABASE_NAME);
 app.use(express.json());
 app.use(cookieParser());
