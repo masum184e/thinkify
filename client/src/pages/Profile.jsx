@@ -1,8 +1,5 @@
-import { Box, Grid, Avatar, Typography, Card, Button } from '@mui/material';
+import { Box, Grid, Avatar, Typography, Card } from '@mui/material';
 import NotesIcon from '@mui/icons-material/Notes';
-import { Link } from 'react-router-dom';
-
-import VerifiedIcon from '@mui/icons-material/Verified';
 
 const Profile = () => {
     return (

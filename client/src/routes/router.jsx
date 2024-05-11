@@ -10,6 +10,7 @@ import TaskManager from "../pages/TaskManager";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import AddProduct from "../pages/AddProduct";
+import AdminSideBar from "../layouts/AdminSideBar";
 
 const router = createBrowserRouter([
     {
@@ -42,6 +43,15 @@ const router = createBrowserRouter([
     }, {
         path: "/add-product",
         element: <UserSideBar><AddProduct /></UserSideBar>
+    }, {
+        path: "/dashboard",
+        element: <AdminSideBar />,
+        children: [
+            {
+                path: "",
+                element: <Profile />
+            }
+        ]
     }
 ])
 

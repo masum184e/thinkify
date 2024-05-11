@@ -1,37 +1,36 @@
 import { Box, Drawer, List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
-import NavBar from "../../components/home/NavBar";
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import ReportIcon from '@mui/icons-material/Report';
+import GroupIcon from '@mui/icons-material/Group';
+
+import NavBar from "./NavBar";
 import Footer from "../../components/home/footer/Footer";
 
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import ListAltIcon from '@mui/icons-material/ListAlt';
-
-const Dashboard = () => {
+const AdminSideBar = () => {
     const listData = [
         {
             label: "My Profile",
             url: "/dashboard",
             icon: <DashboardIcon />
-        }, {
-            label: "My Post",
-            url: "/dashboard/my-post",
-            icon: <ListAltIcon />
-        }, {
-            label: "Add Post",
-            url: "/dashboard/add-post",
-            icon: <AddBoxIcon />
+        },{
+            label: "Users",
+            url: "/dashboard/users",
+            icon: <GroupIcon />
+        },{
+            label: "Reports",
+            url: "/dashboard/reports",
+            icon: <ReportIcon />
         },
     ];
 
     const location = useLocation();
-
     return (
         <div>
             <NavBar />
-            <Box>
+            <Box sx={{ display: "flex" }}>
                 <Drawer
                     variant="persistent"
                     open
@@ -61,10 +60,13 @@ const Dashboard = () => {
                         ))}
                     </List>
                 </Drawer>
+                <Box sx={{ width: "100%", margin: "10px" }}>
+                    <Outlet />
+                </Box>
             </Box>
             <Footer />
         </div>
-    );
-};
+    )
+}
 
-export default Dashboard;
+export default AdminSideBar
