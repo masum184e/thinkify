@@ -1,6 +1,6 @@
 import Banner from "../../components/home/Banner"
-import NavBar from "../../components/home/NavBar"
 import Footer from "../../components/home/footer/Footer"
+import NavBar from "../layouts/NavBar"
 
 const Home = () => {
     return (
