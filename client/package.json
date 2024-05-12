@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@hookform/resolvers": "^3.3.4",
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
     "axios": "^1.6.8",
@@ -27,7 +28,8 @@
     "react-hook-form": "^7.51.2",
     "react-router-dom": "^6.22.3",
     "react-simplemde-editor": "^5.2.0",
-    "sort-by": "^0.0.2"
+    "sort-by": "^0.0.2",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
