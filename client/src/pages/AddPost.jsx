@@ -4,9 +4,19 @@ import SimpleMdeReact from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { useState } from 'react';
 
+import { useEffect } from 'react';
+import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom';
+
 const AddPost = () => {
     const [value, setValue] = useState("Initial value");
-
+    const navigate = useNavigate();
+    useEffect(() => {
+        const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY)
+        if (!cookie) {
+            navigate("/login")
+        }
+    }, [navigate])
     return (
         <Box sx={{ width: "100%" }}>
             <Box sx={{ display: "flex", gap: "10px" }}>

@@ -11,31 +11,42 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
+import { useEffect } from 'react';
+import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom';
+
 const MyPost = () => {
-const data=[
-    {
-      "title": "The Rise of Artificial Intelligence: A Closer Look",
-      "likes": 120,
-      "dislikes": 10,
-      "comments": 25
-    },{
-      "title": "Climate Change: Urgent Actions Needed",
-      "likes": 75,
-      "dislikes": 5,
-      "comments": 15
-    },{
-      "title": "The Impact of Social Media on Mental Health",
-      "likes": 200,
-      "dislikes": 20,
-      "comments": 40
-    },{
-      "title": "Revolutionizing Healthcare with Technology",
-      "likes": 50,
-      "dislikes": 2,
-      "comments": 10
-    }
-  ]
-  
+    const navigate = useNavigate();
+    useEffect(() => {
+        const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY)
+        if (!cookie) {
+            navigate("/login")
+        }
+    }, [navigate])
+    const data = [
+        {
+            "title": "The Rise of Artificial Intelligence: A Closer Look",
+            "likes": 120,
+            "dislikes": 10,
+            "comments": 25
+        }, {
+            "title": "Climate Change: Urgent Actions Needed",
+            "likes": 75,
+            "dislikes": 5,
+            "comments": 15
+        }, {
+            "title": "The Impact of Social Media on Mental Health",
+            "likes": 200,
+            "dislikes": 20,
+            "comments": 40
+        }, {
+            "title": "Revolutionizing Healthcare with Technology",
+            "likes": 50,
+            "dislikes": 2,
+            "comments": 10
+        }
+    ]
+
 
     return (
         <Box sx={{ width: "100%" }}>
@@ -43,13 +54,13 @@ const data=[
                 <Table aria-label="simple table" fullWidth >
                     <TableHead sx={{ backgroundColor: "#59e3a7" }}>
                         <TableRow>
-                            <TableCell sx={{ fontWeight: "bold",color:"white" }}>#</TableCell>
-                            <TableCell sx={{ fontWeight: "bold",color:"white" }}>Title</TableCell>
-                            <TableCell sx={{ fontWeight: "bold",color:"white" }}>Like</TableCell>
-                            <TableCell sx={{ fontWeight: "bold",color:"white" }}>Dislike</TableCell>
-                            <TableCell sx={{ fontWeight: "bold",color:"white" }}>Comment</TableCell>
-                            <TableCell sx={{ fontWeight: "bold",color:"white" }}>Visibility</TableCell>
-                            <TableCell sx={{ fontWeight: "bold",color:"white" }}>Action</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", color: "white" }}>#</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", color: "white" }}>Title</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", color: "white" }}>Like</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", color: "white" }}>Dislike</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", color: "white" }}>Comment</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", color: "white" }}>Visibility</TableCell>
+                            <TableCell sx={{ fontWeight: "bold", color: "white" }}>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

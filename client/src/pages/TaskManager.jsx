@@ -3,8 +3,12 @@ import TaskStatus from '../../components/profile/task-management/TaskStatus';
 import Task from '../../components/profile/task-management/Task';
 
 import AddIcon from '@mui/icons-material/Add';
+import { useEffect } from 'react';
+import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom';
 
 const TaskManager = () => {
+    const navigate=useNavigate();
     const handleDropTodo = () => {
         console.log("Handle Drop Clicked")
     }
@@ -32,6 +36,12 @@ const TaskManager = () => {
             title: "Hello"
         }
     ]
+    useEffect(() => {
+        const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY)
+        if (!cookie) {
+          navigate("/login")
+        }
+      }, [navigate])
     return (
         <>
             <Box sx={{ position: "relative" }} >
