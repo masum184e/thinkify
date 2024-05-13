@@ -35,7 +35,7 @@ const registration = [
             const savedUser = await userData.save();
             if (savedUser) {
                 const token = jwt.sign({ userId: savedUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.TOKEN_EXPIRES });
-                const expires = new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRES)) * 24 * 60 * 60 * 1000); // Default to 1 day if COOKIE_EXPIRES is not set
+                const expires = new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRES)) * 24 * 60 * 60 * 1000);
                 res.cookie(process.env.COOKIE_KEY, token, {
                     httpOnly: false,
                     secure: true,
@@ -55,36 +55,35 @@ const registration = [
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        if (email && password) {
-
-            const existingUser = await UserModel.findOne({ email });
-            if (!existingUser || existingUser.role !== "user") {
-                return res.status(401).send({ "status": false, "message": "Invalid Email" });
-            }
-
-            const isMatch = await bcrypt.compare(password, existingUser.password);
-            if (isMatch) {
-
-                const token = jwt.sign({ userId: existingUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.TOKEN_EXPIRES });
-                res.cookie(process.env.COOKIE_KEY, token, {
-                    httpOnly: true,
-                    secure: true,
-                    sameSite: 'none'
-                }).status(200).send({ "status": true, "message": "Login Successfull" })
-
-            } else {
-                res.status(401).send({ "status": false, "message": "Wrong Password" });
-            }
-
-        } else {
-            res.status(400).send({ "status": false, "message": "All fields are required" })
+        if (!email || !password) {
+            return res.status(400).json({ status: false, message: "All fields are required" });
         }
 
+        const existingUser = await UserModel.findOne({ email });
+        if (!existingUser || existingUser.role !== "user") {
+            return res.status(401).json({ status: false, message: "Invalid Email or User does not exist" });
+        }
+
+        const isMatch = await bcrypt.compare(password, existingUser.password);
+        if (!isMatch) {
+            return res.status(401).json({ status: false, message: "Wrong Password" });
+        }
+
+        const token = jwt.sign({ userId: existingUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.TOKEN_EXPIRES || '1h' });
+        const expires = new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRES)) * 24 * 60 * 60 * 1000);
+        res.cookie(process.env.COOKIE_KEY, token, {
+            httpOnly: false,
+            secure: true,
+            sameSite: 'none',
+            expires
+        }).status(200).json({ status: true, message: "Login Successful" });
+
     } catch (error) {
-        console.error(error)
-        res.status(500).send({ "status": false, "message": error.message })
+        console.error(error);
+        res.status(500).json({ status: false, message: "Internal Server Error" });
     }
 }
+
 
 const getUserData = async (req, res) => {
     res.status(200).send(req.user);
