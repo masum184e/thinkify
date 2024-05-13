@@ -53,10 +53,10 @@ const Registration = () => {
       }
     } catch (error) {
       console.log(error);
-      setAlertMessage(error.message);
-      console.log(alertMessage)
       setAlertBoxOpenStatus(true);
-      console.log(alertBoxOpenStatus)
+      setAlertSeverity("error");
+      setAlertMessage(error.message)
+      console.log(alertBoxOpenStatus, alertMessage)
     }
   };
   useEffect(() => {
