@@ -21,7 +21,7 @@ const registration = [
                 return res.status(400).json({ status: false, message: "User already exists" });
             }
 
-            const bcryptSaltRounds = parseInt(process.env.BCRYPT_GEN_SALT_NUMBER) || 10; // Default to 10 if process.env.BCRYPT_GEN_SALT_NUMBER is not set
+            const bcryptSaltRounds = parseInt(process.env.BCRYPT_GEN_SALT_NUMBER);
             const bcryptSalt = await bcrypt.genSalt(bcryptSaltRounds);
             const hashPassword = await bcrypt.hash(password, bcryptSalt);
 
@@ -34,8 +34,8 @@ const registration = [
             });
             const savedUser = await userData.save();
             if (savedUser) {
-                const token = jwt.sign({ userId: savedUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.TOKEN_EXPIRES || '1h' }); // Default expiration to 1 hour if not set
-                const expires = new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRES) || 1) * 24 * 60 * 60 * 1000); // Default to 1 day if COOKIE_EXPIRES is not set
+                const token = jwt.sign({ userId: savedUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.TOKEN_EXPIRES});
+                const expires = new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRES)) * 24 * 60 * 60 * 1000); // Default to 1 day if COOKIE_EXPIRES is not set
 
                 res.cookie(process.env.EXPRESSJS_COMPLETE_AUTHENTICATION_TOKEN_COOKIE_KEY, token, {
                     httpOnly: true,
