@@ -32,7 +32,6 @@ const registration = [
                 role: "user"
             })
             const savedUser = await userData.save();
-            console.log(savedUser)
             if (savedUser) {
 
                 const token = jwt.sign({ userId: savedUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.TOKEN_EXPIRES });
