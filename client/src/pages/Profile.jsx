@@ -1,9 +1,10 @@
-import { Box, Grid, Avatar, Typography, Card } from '@mui/material';
+import { Box, Grid, Typography, } from '@mui/material';
 import NotesIcon from '@mui/icons-material/Notes';
 
 import { useEffect } from 'react';
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom';
+import ProfileCardDetails from '../../components/profile/profile/ProfileCardDetails';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -47,42 +48,7 @@ const Profile = () => {
                 </Box>
             </Grid>
             <Grid item xs="4" >
-                <Box >
-                    <Card sx={{
-                        backgroundColor: "#59e3a7",
-                        borderRadius: "4px",
-                        padding: "15px 15px 15px 15px",
-                        boxShadow: "0px 0px 3px 0px #1b2e35"
-                    }}  >
-                        <Box sx={{ display: "flex", justifyContent: "space-between", color: "white" }}>
-                            <Box>
-                                <Typography variant="h1"
-                                    sx={{
-                                        fontSize: "45px",
-                                        fontWeight: "bold"
-                                    }}
-                                >Masum Billah</Typography>
-                                <Typography variant="h1"
-                                    sx={{
-                                        fontSize: "20px"
-                                    }}
-                                >masum184e@gmail.com</Typography>
-                            </Box>
-                            <Box sx={{
-                                margin: "auto",
-                                height: "85px",
-                                width: "85px",
-                                padding: "5px",
-                                backgroundColor: "#59e3a7",
-                                borderRadius: "50%",
-                                border: "2px solid white",
-                            }}>
-                                <Avatar sx={{ width: "100%", height: "100%" }} alt="Hdy Baker" src="https://cdn-icons-png.flaticon.com/512/5556/5556468.png" />
-                            </Box>
-                        </Box>
-                        {/* <Typography sx={{ color: "gray", margin: "5px 0" }} variant="body1">At Thinkify, our mission is to provide a dynamic and intuitive platform that empowers individuals to transform their ideas into actionable tasks.</Typography> */}
-                    </Card>
-                </Box>
+                <ProfileCardDetails />
             </Grid>
         </Grid>
     );
