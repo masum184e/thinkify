@@ -90,6 +90,21 @@ const getUserData = async (req, res) => {
 }
 
 const logOut = async (req, res) => {
+    const logout = async (req, res) => {
+        try {
+            res.clearCookie(process.env.COOKIE_KEY, {
+                httpOnly: false,
+                secure: true,
+                sameSite: 'none'
+            });
+
+            res.status(200).json({ status: true, message: "Logout Successful" });
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ status: false, message: "Internal Server Error" });
+        }
+    }
 
 }
 
