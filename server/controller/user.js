@@ -86,7 +86,12 @@ const login = async (req, res) => {
 
 
 const getUserData = async (req, res) => {
-    res.status(200).send(req.user);
+    try {
+        res.status(200).json({ status: true, message: "Data Fetched Successfully", user: req.user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: "Internal Server Error" });
+    }
 }
 
 const logOut = async (req, res) => {
