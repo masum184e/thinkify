@@ -13,7 +13,6 @@ const adminAuthentication = async (req, res, next) => {
             if (Types.ObjectId.isValid(userId)) {
 
                 const user = await UserModel.findById(userId).select("-password");
-                console.log(user)
                 if (user.role === "admin") {
                     req.admin = user
                     next();
