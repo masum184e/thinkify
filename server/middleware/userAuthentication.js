@@ -5,7 +5,7 @@ import UserModel from "../models/userSchema.js";
 
 const userAuthentication = async (req, res, next) => {
     try {
-        const cookieKey = process.env.EXPRESSJS_COMPLETE_AUTHENTICATION_TOKEN_COOKIE_KEY
+        const cookieKey = process.env.COOKIE_KEY;
         const authorizationToken = req.cookies[cookieKey];
         if (authorizationToken) {
 
