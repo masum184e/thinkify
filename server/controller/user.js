@@ -34,11 +34,10 @@ const registration = [
             });
             const savedUser = await userData.save();
             if (savedUser) {
-                const token = jwt.sign({ userId: savedUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.TOKEN_EXPIRES});
+                const token = jwt.sign({ userId: savedUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.TOKEN_EXPIRES });
                 const expires = new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRES)) * 24 * 60 * 60 * 1000); // Default to 1 day if COOKIE_EXPIRES is not set
-
-                res.cookie(process.env.EXPRESSJS_COMPLETE_AUTHENTICATION_TOKEN_COOKIE_KEY, token, {
-                    httpOnly: true,
+                res.cookie(process.env.COOKIE_KEY, token, {
+                    httpOnly: false,
                     secure: true,
                     sameSite: 'none',
                     expires
@@ -67,7 +66,7 @@ const login = async (req, res) => {
             if (isMatch) {
 
                 const token = jwt.sign({ userId: existingUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.TOKEN_EXPIRES });
-                res.cookie(process.env.EXPRESSJS_COMPLETE_AUTHENTICATION_TOKEN_COOKIE_KEY, token, {
+                res.cookie(process.env.COOKIE_KEY, token, {
                     httpOnly: true,
                     secure: true,
                     sameSite: 'none'
