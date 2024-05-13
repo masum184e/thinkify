@@ -3,7 +3,7 @@ import { Types } from 'mongoose';
 
 import UserModel from "../models/userSchema.js";
 
-const userAuthentication = async (req, res, next) => {
+const adminAuthentication = async (req, res, next) => {
     try {
         const cookieKey = process.env.COOKIE_KEY;
         const authorizationToken = req.cookies[cookieKey];
@@ -13,8 +13,9 @@ const userAuthentication = async (req, res, next) => {
             if (Types.ObjectId.isValid(userId)) {
 
                 const user = await UserModel.findById(userId).select("-password");
-                if (user.role === "user") {
-                    req.user = user
+                console.log(user)
+                if (user.role === "admin") {
+                    req.admin = user
                     next();
                 } else {
                     return res.status(403).json({ "status": false, "message": "Invalid Request" });
@@ -33,4 +34,4 @@ const userAuthentication = async (req, res, next) => {
     }
 }
 
-export default userAuthentication;
+export default adminAuthentication;
