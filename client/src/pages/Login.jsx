@@ -7,6 +7,13 @@ import { useEffect } from "react";
 import axios from 'axios';
 import useThinkify from "../hooks/useThinkify";
 import AlertBox from "../../components/common/AlertBox";
+import * as yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup"
+
+const schema = yup.object().shape({
+    email: yup.string().email('Invalid email').required('Email is required'),
+    password: yup.string().required('Password is required')
+  });
 
 const Login = () => {
     const navigate = useNavigate();
@@ -16,6 +23,7 @@ const Login = () => {
             email: "",
             password: ""
         },
+        resolver: yupResolver(schema)
     });
     const onSubmit = async (data) => {
         try {
