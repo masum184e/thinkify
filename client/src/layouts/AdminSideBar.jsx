@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ReportIcon from '@mui/icons-material/Report';
 import GroupIcon from '@mui/icons-material/Group';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import NavBar from "./NavBar";
 import Footer from "../../components/home/footer/Footer";
@@ -23,6 +24,10 @@ const AdminSideBar = () => {
             label: "Reports",
             url: "/dashboard/reports",
             icon: <ReportIcon />
+        },{
+            label: "Sign Out",
+            url: "#",
+            icon: <LogoutIcon />
         },
     ];
 
@@ -50,8 +55,9 @@ const AdminSideBar = () => {
                             >
                                 <NavLink
                                     to={url}
-                                    style={{ textDecoration: "none", display: "flex", alignItems: "center", color: location.pathname === url ? '#59e3a7' : 'inherit' }}
+                                    style={{ width:"100%",textDecoration: "none", display: "flex", alignItems: "center", color: location.pathname === url ? '#59e3a7' : 'inherit' }}
                                     activeStyle={{ color: '#59e3a7' }}
+                        
                                 >
                                     <ListItemIcon sx={{ color: location.pathname === url ? '#59e3a7' : 'inherit' }}>{icon}</ListItemIcon>
                                     <ListItemText primary={label} sx={{ color: location.pathname === url ? '#59e3a7' : 'inherit' }} />
