@@ -12,16 +12,17 @@ const registration = [
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                return res.status(400).json({ "status": false, "message": errors.array()[0].msg });
+                return res.status(400).json({ status: false, message: errors.array()[0].msg });
             }
 
             const { fullName, email, password } = req.body;
             const existingUser = await UserModel.findOne({ email });
             if (existingUser) {
-                return res.status(400).send({ "status": false, "message": "User already exists" });
+                return res.status(400).json({ status: false, message: "User already exists" });
             }
 
-            const bcryptSalt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_GEN_SALT_NUMBER));
+            const bcryptSaltRounds = parseInt(process.env.BCRYPT_GEN_SALT_NUMBER) || 10; // Default to 10 if process.env.BCRYPT_GEN_SALT_NUMBER is not set
+            const bcryptSalt = await bcrypt.genSalt(bcryptSaltRounds);
             const hashPassword = await bcrypt.hash(password, bcryptSalt);
 
             const userData = new UserModel({
@@ -30,25 +31,24 @@ const registration = [
                 password: hashPassword,
                 createdAt: new Date(),
                 role: "user"
-            })
+            });
             const savedUser = await userData.save();
             if (savedUser) {
+                const token = jwt.sign({ userId: savedUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.TOKEN_EXPIRES || '1h' }); // Default expiration to 1 hour if not set
+                const expires = new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRES) || 1) * 24 * 60 * 60 * 1000); // Default to 1 day if COOKIE_EXPIRES is not set
 
-                const token = jwt.sign({ userId: savedUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.TOKEN_EXPIRES });
                 res.cookie(process.env.EXPRESSJS_COMPLETE_AUTHENTICATION_TOKEN_COOKIE_KEY, token, {
                     httpOnly: true,
                     secure: true,
-                    sameSite: 'none'
-                }).status(200).send({ "status": true, "message": "Registration Successfull" })
-
+                    sameSite: 'none',
+                    expires
+                }).status(200).json({ status: true, message: "Registration Successful" });
             } else {
-                res.status(500).send({ "status": false, "message": "Something Went Wrong" });
+                res.status(500).json({ status: false, message: "Something Went Wrong" });
             }
-
-
         } catch (error) {
             console.error(error);
-            res.status(500).json({ "status": false, "message": error.message });
+            res.status(500).json({ status: false, message: "Internal Server Error" });
         }
     }
 ];
