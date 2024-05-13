@@ -4,11 +4,14 @@ import GoogleIcon from '@mui/icons-material/Google';
 import { useForm } from "react-hook-form";
 import Cookies from 'js-cookie'
 import { useEffect } from "react";
+import axios from 'axios';
+import useThinkify from "../hooks/useThinkify";
+import AlertBox from "../../components/common/AlertBox";
 
 const Login = () => {
     const navigate = useNavigate();
     const { alertMessage, alertBoxOpenStatus, setAlertBoxOpenStatus, setAlertMessage, setAlertSeverity } = useThinkify();
-    const { login, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             email: "",
             password: ""
@@ -61,6 +64,7 @@ const Login = () => {
                     </Box>
                 </Box>
                 <Box sx={{ flex: 1, backgroundColor: "#1b2e35", display: "flex", alignItems: "center" }}>
+                    <AlertBox />
                     <Box width={1 / 2} mx="auto" my="auto" >
                         <Typography variant="h2" component="h2" sx={{ color: "white", fontSize: "2.25rem", fontWeight: "bold" }}>Welcome Back</Typography>
                         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 4 }}>
@@ -87,7 +91,7 @@ const Login = () => {
                                         },
                                     },
                                 }}
-                                {...login("email", { required: true })}
+                                {...register("email", { required: true })}
                             />
                             {errors.email && <Typography variant="p" component="p" sx={{ color: "red", mb: 2 }}>{errors.email.message}</Typography>}
                             <TextField
@@ -114,7 +118,7 @@ const Login = () => {
                                         },
                                     },
                                 }}
-                                {...login("password", { required: true })}
+                                {...register("password", { required: true })}
                             />
                             {errors.password && <Typography variant="p" component="p" sx={{ color: "red" }}>{errors.password.message}</Typography>}
                             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
