@@ -1,5 +1,5 @@
 import { Box, Drawer, List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -13,8 +13,10 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 import NavBar from "./NavBar";
 import Footer from "../../components/home/footer/Footer";
+import axios from 'axios';
 
 const UserSideBar = ({ children }) => {
+    const navigate = useNavigate();
     const listData = [
         {
             label: "My Profile",
@@ -40,12 +42,23 @@ const UserSideBar = ({ children }) => {
             label: "Setting",
             url: "/setting",
             icon: <SettingsIcon />
-        }, {
-            label: "Sign Out",
-            url: "#",
-            icon: <LogoutIcon />
-        },
+        }
     ];
+
+    const handleLogOut = async () => {
+        const response = await axios({
+            baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
+            url: "/users/log-out",
+            withCredentials: true,
+            method: "GET",
+        });
+        if (response.data.status) {
+            console.log(response.data.message)
+            navigate("/login");
+        } else {
+            console.log(response.data)
+        }
+    }
 
     const location = useLocation();
     return (
@@ -79,6 +92,19 @@ const UserSideBar = ({ children }) => {
                                 </NavLink>
                             </ListItem>
                         ))}
+                        <ListItem
+                            sx={{ borderBottom: "1px solid lightgray" }}
+                            component="div"
+                        >
+                            <NavLink
+                                onClick={handleLogOut}
+                                component="button"
+                                style={{ width: "100%", textDecoration: "none", display: "flex", alignItems: "center", color: "inherit" }}
+                            >
+                                <ListItemIcon sx={{ color: "inherit" }} ><LogoutIcon /></ListItemIcon>
+                                <ListItemText primary={"Sign Out"} />
+                            </NavLink>
+                        </ListItem>
                     </List>
                 </Drawer>
                 <Box sx={{ width: "100%", margin: "10px" }}>
