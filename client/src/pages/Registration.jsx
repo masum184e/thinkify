@@ -42,21 +42,19 @@ const Registration = () => {
         method: "POST",
         data
       });
+      console.log(response.data);
       if (response.data.status) {
         navigate("/profile")
-        console.log(response.data.message);
       } else {
         setAlertBoxOpenStatus(true);
         setAlertSeverity("error");
         setAlertMessage(response.data.message)
-        console.log(alertBoxOpenStatus, alertMessage)
       }
     } catch (error) {
       console.log(error);
       setAlertBoxOpenStatus(true);
       setAlertSeverity("error");
-      setAlertMessage(error.message)
-      console.log(alertBoxOpenStatus, alertMessage)
+      error.response.data.message?setAlertMessage(error.response.data.message):setAlertMessage(error.message)
     }
   };
   useEffect(() => {
