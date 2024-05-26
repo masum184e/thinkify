@@ -1,7 +1,9 @@
 import { AppBar, Toolbar, Box, Typography, Button, ButtonGroup } from '@mui/material';
 import { Link } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 export default function NavBar() {
+    const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY)
     return (
         <Box>
             <AppBar position="static" sx={{ backgroundColor: "transparent", borderBottom: "1px solid #59e3a7", padding: "5px 0" }} elevation={0} >
@@ -22,10 +24,14 @@ export default function NavBar() {
                                 </Box>
                             </Link>
                             <Box >
+                            {
+                                !cookie && <>
                                 <ButtonGroup >
                                     <Link to="/registration"><Button sx={{ backgroundColor: "#1b2e35", color: "white", "&:hover": { backgroundColor: "#1b2e35" } }}>Join</Button></Link>
                                     <Link to="/login"><Button sx={{ backgroundColor: "#1b2e35", color: "white", "&:hover": { backgroundColor: "#1b2e35" } }}>Login</Button></Link>
-                                </ButtonGroup>0
+                                </ButtonGroup>
+                                </>
+                            }
                             </Box>
                         </Box>
                     </Box>
