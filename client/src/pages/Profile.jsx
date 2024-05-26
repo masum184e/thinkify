@@ -16,7 +16,7 @@ const Profile = () => {
     }, [navigate])
     return (
         <Grid container  >
-            <Grid item xs="8" sx={{ paddingRight: "15px" }}>
+            <Grid item sx={{ paddingRight: "15px" }}>
                 <Box sx={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
                     <Box sx={{ backgroundColor: "#59e3a7", padding: "5px 10px 15px 5px", borderRadius: "5px", flex: "1", boxShadow: "0px 0px 3px 0px #1b2e35" }}>
                         <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
@@ -47,7 +47,7 @@ const Profile = () => {
                     </Box>
                 </Box>
             </Grid>
-            <Grid item xs="4" >
+            <Grid item >
                 <ProfileCardDetails />
             </Grid>
         </Grid>

@@ -56,7 +56,7 @@ const AdminSideBar = () => {
                                 <NavLink
                                     to={url}
                                     style={{ width:"100%",textDecoration: "none", display: "flex", alignItems: "center", color: location.pathname === url ? '#59e3a7' : 'inherit' }}
-                                    activeStyle={{ color: '#59e3a7' }}
+                                    activestyle={{ color: '#59e3a7' }}
                         
                                 >
                                     <ListItemIcon sx={{ color: location.pathname === url ? '#59e3a7' : 'inherit' }}>{icon}</ListItemIcon>
