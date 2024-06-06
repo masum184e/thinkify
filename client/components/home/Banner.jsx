@@ -32,11 +32,11 @@ const Banner = () => {
                         </form>
                     </Box>
                     <Stack direction="row" spacing={1}>
-                        <Chip label="vr-gaming" sx={{ backgroundColor: "#1b2e35", color: "white" }} />
-                        <Chip label="blockchain" sx={{ backgroundColor: "#1b2e35", color: "white" }} />
-                        <Chip label="crypto-currency" sx={{ backgroundColor: "#1b2e35", color: "white" }} />
-                        <Chip label="machine-learning" sx={{ backgroundColor: "#1b2e35", color: "white" }} />
-                        <Chip label="cyber-security" sx={{ backgroundColor: "#1b2e35", color: "white" }} />
+                        <Chip label="vr-gaming" sx={{ backgroundColor: "#1b2e35", color: "white", cursor: "pointer" }} />
+                        <Chip label="blockchain" sx={{ backgroundColor: "#1b2e35", color: "white", cursor: "pointer" }} />
+                        <Chip label="crypto-currency" sx={{ backgroundColor: "#1b2e35", color: "white", cursor: "pointer" }} />
+                        <Chip label="machine-learning" sx={{ backgroundColor: "#1b2e35", color: "white", cursor: "pointer" }} />
+                        <Chip label="cyber-security" sx={{ backgroundColor: "#1b2e35", color: "white", cursor: "pointer" }} />
                     </Stack>
                 </Grid>
                 <Grid item xs={6}>
