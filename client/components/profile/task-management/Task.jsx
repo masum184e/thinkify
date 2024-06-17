@@ -20,8 +20,8 @@ const Task = ({ text, taskId }) => {
                 <IconButton color="primary">
                     <EditIcon />
                 </IconButton>
-                <IconButton color="secondary">
-                    <DeleteIcon onClick={() => handleDelete(taskId)} />
+                <IconButton color="secondary" onClick={() => handleDelete(taskId)}  >
+                    <DeleteIcon/>
                 </IconButton>
             </ListItem>
         </div>
