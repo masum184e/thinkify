@@ -70,6 +70,7 @@ const AddProductFrom = () => {
                       bottom: "0",
                       color: "red",
                     }}
+                    onClick={() => setValue("productimage", null)}
                   >
                     <DeleteIcon />
                   </IconButton>
