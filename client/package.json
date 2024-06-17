@@ -18,6 +18,7 @@
     "@mui/x-date-pickers": "^7.7.0",
     "axios": "^1.6.8",
     "dayjs": "^1.11.11",
+    "dompurify": "^3.1.5",
     "easymde": "^2.18.0",
     "js-cookie": "^3.0.5",
     "localforage": "^1.10.0",

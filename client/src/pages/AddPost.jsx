@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import SimpleMdeReact from "react-simplemde-editor";
-// import marked from 'marked';
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 import "easymde/dist/easymde.min.css";
 
 import Cookies from "js-cookie";
@@ -22,6 +23,10 @@ const AddPost = () => {
       setTags([...tags, tag.trim()]);
       setTag("");
     }
+  };
+  const renderMarkdown = () => {
+    const html = marked(description);
+    return { __html: DOMPurify.sanitize(html) };
   };
 
   const handleRemoveTag = (indexToRemove) => {
@@ -115,7 +120,7 @@ const AddPost = () => {
                   />
                 </Box>
               </Box>
-              {/* <div dangerouslySetInnerHTML={{ __html: marked(description) }}></div> */}
+              <div dangerouslySetInnerHTML={renderMarkdown()} />
             </Box>
             <Box sx={{ flex: "1" }}>
               <Box>
