@@ -1,55 +1,31 @@
-import { Box, TextField, Button, Chip } from "@mui/material";
-import InputBase from "@mui/material/InputBase";
-import ClearIcon from "@mui/icons-material/Clear";
-
-import SimpleMdeReact from "react-simplemde-editor";
-import "easymde/dist/easymde.min.css";
+import { Box, TextField, Button, InputBase, Chip } from "@mui/material";
+import { useForm } from "react-hook-form";
 import { useState } from "react";
 
-import { useEffect } from "react";
-import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-
 const AddPost = () => {
-  const [description, setDescription] = useState("");
-  const [tags, setTags] = useState([]);
   const { handleSubmit, register } = useForm();
+  const [tag, setTag] = useState("");
+  const [tags, setTags] = useState([]);
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && tag.trim() !== "") {
+      event.preventDefault();
+      setTags([...tags, tag.trim()]);
+      setTag("");
+    }
+  };
+  const handleRemoveTag = (indexToRemove) => {
+    const newTags = tags.filter((_, index) => index !== indexToRemove);
+    setTags(newTags);
+  };
   const onSubmit = (data) => {
     console.log(data);
   };
-  const navigate = useNavigate();
-  useEffect(() => {
-    const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY);
-    if (!cookie) {
-      navigate("/login");
-    }
-  }, [navigate]);
   return (
-    <Box sx={{ width: "100%" }}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Box sx={{ display: "flex", gap: "10px" }}>
-          <Box sx={{ flex: "1" }}>
-            <Box>
-              <label
-                htmlFor=""
-                style={{ fontSize: "25px", fontWeight: "bold" }}
-              >
-                Title
-              </label>
-              <TextField
-                placeholder="Enter Post Title"
-                fullWidth
-                {...register("title", { required: true })}
-              />
-            </Box>
-            <Box>
-              <label
-                htmlFor=""
-                style={{ fontSize: "25px", fontWeight: "bold" }}
-              >
-                Tags
-              </label>
+    <>
+      <Box sx={{ width: "100%" }}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Box sx={{ display: "flex", gap: "10px" }}>
+            <Box sx={{ flex: "1" }}>
               <Box
                 sx={{
                   border: "1px solid lightgray",
@@ -57,68 +33,56 @@ const AddPost = () => {
                   borderRadius: "5px",
                   display: "flex",
                   gap: "5px",
-                  alignItems: "center", // Align items vertically in flex container
+                  alignItems: "center",
                 }}
               >
-                <Chip
-                  label="blockchain"
-                  variant="outlined"
-                  size="small"
-                  sx={{
-                    backgroundColor: "#1b2e35",
-                    color: "white",
-                    borderRadius: "25px",
-                    fontSize: "13px",
-                    padding: "5px",
-                    "& .MuiChip-deleteIcon": {
+                {tags.map((item, index) => (
+                  <Chip
+                    key={index}
+                    label={item}
+                    variant="outlined"
+                    size="small"
+                    sx={{
+                      backgroundColor: "#1b2e35",
                       color: "white",
-                      marginLeft: "px",
-                    },
-                  }}
-                  onDelete={() => {}}
-                />
+                      borderRadius: "25px",
+                      fontSize: "13px",
+                      padding: "5px",
+                      "& .MuiChip-deleteIcon": {
+                        color: "white",
+                        marginLeft: "px",
+                      },
+                      "& .MuiChip-deleteIcon:hover": {
+                        color: "white",
+                        marginLeft: "px",
+                      },
+                    }}
+                    onDelete={() => handleRemoveTag(index)}
+                  />
+                ))}
 
                 <InputBase
                   sx={{
                     outline: "none",
                     borderBottom: " 1px solid #1b2e35",
                     padding: "1px 10px 0 10px",
-                    "&::placeholder": {
+                    "& input::placeholder": {
                       color: "#1b2e35",
+                      opacity: "0.8",
                     },
                   }}
                   placeholder="Enter Your Tag"
+                  value={tag}
+                  onChange={(event) => setTag(event.target.value)}
+                  onKeyDown={handleKeyDown}
                 />
               </Box>
             </Box>
+            <Box sx={{ flex: "1" }}></Box>
           </Box>
-          <Box sx={{ flex: "1" }}>
-            <Box>
-              <label
-                htmlFor=""
-                style={{ fontSize: "25px", fontWeight: "bold" }}
-              >
-                Title
-              </label>
-              <SimpleMdeReact value={description} setValue={setDescription} />
-            </Box>
-          </Box>
-        </Box>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{
-            mt: 2,
-            color: "white",
-            backgroundColor: "#1b2e35",
-            "&:hover": { backgroundColor: "#1b2e35" },
-          }}
-        >
-          Post
-        </Button>
-      </form>
-    </Box>
+        </form>
+      </Box>
+    </>
   );
 };
 
