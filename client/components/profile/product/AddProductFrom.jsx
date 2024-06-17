@@ -1,18 +1,29 @@
 import { Box, Button, TextField, IconButton } from "@mui/material";
-
 import DeleteIcon from "@mui/icons-material/Delete";
-
-import { useForm } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 const AddProductFrom = () => {
-  const { register, handleSubmit, setValue, watch } = useForm();
-  const file = watch("productimage");
+  const { register, handleSubmit, setValue, watch } = useFormContext();
   const onSubmit = (data) => {
     const formData = new FormData();
-    formData.append("file", data);
+    if (data.productimage && data.productimage[0] instanceof File) {
+      formData.append("file", data.productimage[0]);
+    }
     console.log(formData);
     console.log(data);
   };
+
+  const productImage = watch("productimage");
+
+  let productImageUrl = null;
+  if (productImage && productImage[0] && productImage[0] instanceof File) {
+    try {
+      productImageUrl = URL.createObjectURL(productImage[0]);
+    } catch (error) {
+      console.error("Error creating object URL:", error);
+    }
+  }
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -49,17 +60,18 @@ const AddProductFrom = () => {
                 validate: {
                   validFileType: (value) =>
                     value &&
+                    value.length > 0 &&
                     ["image/jpeg", "image/png"].includes(value[0].type),
                 },
               })}
             />
           </Box>
           <Box>
-            {file && (
+            {productImageUrl && (
               <>
                 <Box sx={{ position: "relative", display: "inline" }}>
                   <img
-                    src={URL.createObjectURL(file[0])}
+                    src={productImageUrl}
                     alt=""
                     width="100"
                     height="50"
