@@ -9,8 +9,9 @@ const AddProductFrom = () => {
   const file = watch("productimage");
   const onSubmit = (data) => {
     const formData = new FormData();
-    formData.append("file", data.file[0]);
+    formData.append("file", data);
     console.log(formData);
+    console.log(data);
   };
   return (
     <>
@@ -21,6 +22,9 @@ const AddProductFrom = () => {
             placeholder="Enter Product Title"
             fullWidth
             sx={{ marginBottom: 1 }}
+            {...register("title", {
+              required: "Product title is required",
+            })}
           />
           <Box>
             <Button
@@ -83,6 +87,9 @@ const AddProductFrom = () => {
             label="Product Price"
             placeholder="Enter Product Price"
             fullWidth
+            {...register("price", {
+              required: "Product price is required",
+            })}
           />
 
           <TextField
@@ -92,12 +99,16 @@ const AddProductFrom = () => {
             variant="outlined"
             fullWidth
             sx={{ marginY: 1 }}
+            {...register("description", {
+              required: "Description is required",
+            })}
           />
 
           <Button
             variant="contained"
             fullWidth
             sx={{ backgroundColor: "#59e3a7" }}
+            type="submit"
           >
             Add
           </Button>
