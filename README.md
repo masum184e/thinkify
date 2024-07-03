@@ -3,7 +3,7 @@ Thinkify is a vibrant space where people from diverse backgrounds and interests 
 
 # Preview
 <img src="/preview.png">
-<a href="">Live Preview</a> | <a href="">Live API</a> | <a href="">Postman</a>
+<a href="https://thinkify.vercel.app" target="_blank">Live Preview</a> | <a href="https://thinkify-server.vercel.app" target="_blank">Live API</a> | <a href="https://documenter.getpostman.com/view/27027258/2sA3dxEXJh" target="_blank">Postman</a>
 
 # Requirements
 [Install Node On Your Device](https://nodejs.org/)
