@@ -11,6 +11,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import AddProduct from "../pages/AddProduct";
 import AdminSideBar from "../layouts/AdminSideBar";
+import NotFound from "../pages/NotFound";
 
 const router = createBrowserRouter([
     {
@@ -52,6 +53,9 @@ const router = createBrowserRouter([
                 element: <Profile />
             }
         ]
+    },{
+        path:"*",
+        element:<NotFound />
     }
 ])
 
