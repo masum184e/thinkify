@@ -1,34 +1,25 @@
 import { Box, Button, Typography } from "@mui/material";
 
 const Membership = () => {
-  const packages = [
+  const pacage = [
     {
-      icon: <img src="./icons/rocket.svg" style={{ width: "60px" }} />,
+      icon: <img src="./icons/rocket.svg" style={{width:"60px"}} />,
       title: "Starter Pack",
       text: "Affordable services to kickstart your journey.",
     },
     {
-      icon: <img src="./icons/vip.svg" style={{ width: "60px" }} />,
+      icon: <img src="./icons/vip.svg" style={{width:"60px"}} />,
       title: "Pro Bundle",
       text: "Advanced features for growing your business.",
     },
     {
-      icon: <img src="./icons/diamond.svg" style={{ width: "60px" }} />,
+      icon: <img src="./icons/diamond.svg" style={{width:"60px"}} />,
       title: "Elite Suite",
       text: "Premium solutions for ultimate success and scale.",
     },
   ];
   return (
-    <Box
-      maxWidth="1280px"
-      mx="auto"
-      px={5}
-      py={10}
-      sx={{
-        backgroundColor: "#1b2e35",
-        borderRadius: "5px",
-      }}
-    >
+    <Box maxWidth="1280px" mx="auto" py={10}  >
       <Box
         sx={{
           display: "flex",
@@ -42,7 +33,7 @@ const Membership = () => {
             sx={{
               textTransform: "uppercase",
               fontWeight: "bold",
-              color: "white",
+              color: "#1b2e35",
             }}
           >
             How we work
@@ -53,9 +44,7 @@ const Membership = () => {
         </Box>
         <Box flex="1">
           <Typography variant="body1" color="#797979">
-            Unlock premium services tailored to your needs at unbeatable prices!
-            Whether you{"'"}re just starting out or looking to scale, our
-            packages offer the perfect blend of affordability and value.
+          Unlock premium services tailored to your needs at unbeatable prices! Whether you{"'"}re just starting out or looking to scale, our packages offer the perfect blend of affordability and value.
           </Typography>
           <Button
             variant="contained"
@@ -76,36 +65,16 @@ const Membership = () => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent:"space-between",
           flexDirection: { xs: "column", md: "row" },
           gap: 2,
           mt: 8,
         }}
       >
-        {packages.map((item, index) => (
+        {pacage.map((item, index) => (
           <Box key={index} sx={{ textAlign: "center" }}>
-            <Box
-              sx={{
-                background: "white",
-                width: "100px",
-                height: "100px",
-                borderRadius: "50%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                margin: "0 auto",
-              }}
-            >
-              {item.icon}
-            </Box>
-            <Typography
-              variant="h5"
-              component="h3"
-              color="white"
-              textTransform="uppercase"
-              fontWeight="bold"
-              marginTop="10px"
-            >
+            {item.icon}
+            <Typography variant="h5" component="h3" color="#1b2e35" textTransform="uppercase" fontWeight="bold" marginTop="10px">
               {item.title}
             </Typography>
             <Typography variant="body2" color="#797979">
