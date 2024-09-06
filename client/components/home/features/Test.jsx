@@ -1,6 +1,6 @@
 import { Box, Grid, Typography } from "@mui/material";
 
-const Thoughts = () => {
+const Test = () => {
   return (
     <Grid
       container
@@ -51,4 +51,4 @@ const Thoughts = () => {
   );
 };
 
-export default Thoughts;
+export default Test;

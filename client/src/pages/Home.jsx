@@ -1,5 +1,6 @@
 import Banner from "../../components/home/Banner";
-import Features from "../../components/home/features/Features";
+import Task from "../../components/home/features/Task";
+import Thoughts from "../../components/home/features/Thoughts";
 import Footer from "../../components/home/footer/Footer";
 import Membership from "../../components/home/membership/Membership";
 import Newsletter from "../../components/home/Newsletter";
@@ -10,9 +11,10 @@ const Home = () => {
     <>
       <NavBar />
       <Banner />
-      <Features />
-      <Newsletter />
+      <Thoughts />
       <Membership />
+      <Task />
+      <Newsletter />
       <Footer />
     </>
   );
