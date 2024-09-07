@@ -1,4 +1,4 @@
-import Post from "../models/postSchema.js";
+import PostModel from "../models/postSchema.js";
 
 const addPost = async (req, res) => {
     try {
@@ -9,7 +9,7 @@ const addPost = async (req, res) => {
             return res.status(400).json({ status: false, message: "All fields are required" });
         }
 
-        const newPost = await Post({
+        const newPost = await PostModel({
             title,
             tags,
             description,
@@ -41,7 +41,7 @@ const getAllPost = async (req, res) => {
     try {
 
         const authorId = req.user._id.toString();
-        const posts = await Post.find({ authorId });
+        const posts = await PostModel.find({ authorId });
         res.status(200).json({ status: true, message: "Data Fetched Successfully", posts });
 
     } catch (error) {
