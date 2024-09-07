@@ -58,11 +58,11 @@ const UserSideBar = ({ children }) => {
       url: "/task-management",
       icon: <PlaylistAddCheckIcon />,
     },
-    {
-      label: "Setting",
-      url: "/setting",
-      icon: <SettingsIcon />,
-    },
+    // {
+    //   label: "Setting",
+    //   url: "/setting",
+    //   icon: <SettingsIcon />,
+    // },
   ];
 
   const handleLogOut = async () => {
