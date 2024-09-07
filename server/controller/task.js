@@ -16,6 +16,7 @@ const addTask = async (req, res) => {
             deadline: selectedDate,
             authorId,
             createdAt: new Date(),
+            taskStatus: "todo"
         })
         const savedTask = await newTask.save();
         if (savedTask) {
@@ -39,7 +40,16 @@ const editTask = async (req, res) => {
 }
 
 const getAllTask = async (req, res) => {
+    try {
 
+        const authorId = req.user._id.toString();
+        const tasks = await TaskModel.find({ authorId });
+        res.status(200).json({ status: true, message: "Data Fetched Successfully", tasks });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: "Internal Server Error" });
+    }
 }
 
 export { addTask, removeTask, editTask, getAllTask };

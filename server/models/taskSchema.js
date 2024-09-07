@@ -18,6 +18,11 @@ const taskSchema = new mongoose.Schema({
         enum: ['Low', 'Moderate', 'High', 'Critical'],
         required: true,
     },
+    taskStatus: {
+        type: String,
+        enum: ['todo', 'ongoing', 'completed'],
+        required: true
+    },
     authorId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
