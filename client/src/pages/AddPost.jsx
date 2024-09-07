@@ -1,4 +1,11 @@
-import { Box, TextField, Button, InputBase, Chip } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  InputBase,
+  Chip,
+  Typography,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
@@ -6,9 +13,24 @@ import SimpleMdeReact from "react-simplemde-editor";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 import "easymde/dist/easymde.min.css";
+import useThinkify from "../hooks/useThinkify";
+import axios from "axios";
 
 const AddPost = () => {
-  const { handleSubmit, register } = useForm();
+  const {
+    setLoadingStatus,
+    setAlertBoxOpenStatus,
+    setAlertMessage,
+    setAlertSeverity,
+  } = useThinkify();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    setError,
+    clearErrors,
+    reset,
+  } = useForm();
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
   const [description, setDescription] = useState("");
@@ -18,8 +40,10 @@ const AddPost = () => {
       event.preventDefault();
       setTags([...tags, tag.trim()]);
       setTag("");
+      clearErrors("tags");
     }
   };
+
   const renderMarkdown = () => {
     const html = marked(description);
     return { __html: DOMPurify.sanitize(html) };
@@ -29,9 +53,59 @@ const AddPost = () => {
     const newTags = tags.filter((_, index) => index !== indexToRemove);
     setTags(newTags);
   };
-  const onSubmit = (data) => {
-    console.log(data, tags, description);
+
+  const onSubmit = async (data) => {
+    if (tags.length === 0) {
+      setError("tags", {
+        type: "manual",
+        message: "At least one tag is required",
+      });
+      return;
+    }
+
+    if (description.trim().length === 0) {
+      setError("description", {
+        type: "manual",
+        message: "Description is required",
+      });
+      return;
+    }
+
+    try {
+      setLoadingStatus(true);
+      const response = await axios({
+        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
+        url: "/posts",
+        withCredentials: true,
+        method: "POST",
+        data: {
+          title: data.title,
+          tags,
+          description,
+        },
+      });
+      if (response.data.status) {
+        reset();
+        setTags([]);
+        setDescription("");
+      }
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity(response.data.status ? "success" : "error");
+      setAlertMessage(response.data.message);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity("error");
+      error.response.data.message
+        ? setAlertMessage(error.response.data.message)
+        : setAlertMessage(error.message);
+    } finally {
+      setLoadingStatus(false);
+    }
   };
+
   return (
     <>
       <Box sx={{ width: "100%" }}>
@@ -40,7 +114,7 @@ const AddPost = () => {
             <Box sx={{ flex: "1" }}>
               <Box>
                 <label
-                  htmlFor=""
+                  htmlFor="title"
                   style={{ fontSize: "25px", fontWeight: "bold" }}
                 >
                   Title
@@ -48,12 +122,15 @@ const AddPost = () => {
                 <TextField
                   placeholder="Enter Post Title"
                   fullWidth
-                  {...register("title", { required: true })}
+                  {...register("title", { required: "Title is required" })}
+                  error={!!errors.title}
+                  helperText={errors.title ? errors.title.message : ""}
                 />
               </Box>
+
               <Box>
                 <label
-                  htmlFor=""
+                  htmlFor="tags"
                   style={{ fontSize: "25px", fontWeight: "bold" }}
                 >
                   Tags
@@ -66,6 +143,7 @@ const AddPost = () => {
                     display: "flex",
                     gap: "5px",
                     alignItems: "center",
+                    flexWrap: "wrap",
                   }}
                 >
                   {tags.map((item, index) => (
@@ -82,11 +160,6 @@ const AddPost = () => {
                         padding: "5px",
                         "& .MuiChip-deleteIcon": {
                           color: "white",
-                          marginLeft: "px",
-                        },
-                        "& .MuiChip-deleteIcon:hover": {
-                          color: "white",
-                          marginLeft: "px",
                         },
                       }}
                       onDelete={() => handleRemoveTag(index)}
@@ -96,7 +169,7 @@ const AddPost = () => {
                   <InputBase
                     sx={{
                       outline: "none",
-                      borderBottom: " 1px solid #1b2e35",
+                      borderBottom: "1px solid #1b2e35",
                       padding: "1px 10px 0 10px",
                       "& input::placeholder": {
                         color: "#1b2e35",
@@ -109,13 +182,20 @@ const AddPost = () => {
                     onKeyDown={handleKeyDown}
                   />
                 </Box>
+                {errors.tags && (
+                  <Typography color="error" variant="body2">
+                    {errors.tags.message}
+                  </Typography>
+                )}
               </Box>
+
               <div dangerouslySetInnerHTML={renderMarkdown()} />
             </Box>
+
             <Box sx={{ flex: "1" }}>
               <Box>
                 <label
-                  htmlFor=""
+                  htmlFor="description"
                   style={{ fontSize: "25px", fontWeight: "bold" }}
                 >
                   Description
@@ -126,6 +206,11 @@ const AddPost = () => {
                   onChange={setDescription}
                 />
               </Box>
+              {errors.description && (
+                <Typography color="error" variant="body2">
+                  {errors.description.message}
+                </Typography>
+              )}
             </Box>
           </Box>
           <Button
