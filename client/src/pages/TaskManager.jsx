@@ -1,4 +1,4 @@
-import { Grid, Box, List, Fab } from "@mui/material";
+import { Grid, Box, List, Fab, Modal } from "@mui/material";
 import TaskStatus from "../../components/profile/task-management/TaskStatus";
 import Task from "../../components/profile/task-management/Task";
 
@@ -6,10 +6,26 @@ import AddIcon from "@mui/icons-material/Add";
 import AddTask from "../../components/profile/task-management/AddTask";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import useThinkify from "../hooks/useThinkify";
+import dayjs from "dayjs";
+import { useForm, FormProvider } from "react-hook-form";
 
 const TaskManager = () => {
   const [openModal, setOpenModal] = useState(false);
+  const {
+    setLoadingStatus,
+    setAlertBoxOpenStatus,
+    setAlertMessage,
+    setAlertSeverity,
+  } = useThinkify();
+  const [selectedDate, setSelectedDate] = useState(dayjs());
   const [data, setData] = useState([]);
+  const methods = useForm({
+    defaultValues: {
+      title: "",
+      description: "",
+    },
+  });
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,8 +45,45 @@ const TaskManager = () => {
       }
     };
     fetchData();
-    console.log(data)
+    console.log(data);
   }, []);
+  const onSubmit = async (data) => {
+    console.log(data, selectedDate);
+    try {
+      setLoadingStatus(true);
+
+      const response = await axios({
+        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
+        url: "/tasks",
+        withCredentials: true,
+        method: "POST",
+        data: {
+          ...data,
+          selectedDate,
+        },
+      });
+      if (response.data.status) {
+        setOpenModal(false);
+        methods.reset();
+        setSelectedDate(dayjs());
+      }
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity(response.data.status ? "success" : "error");
+      setAlertMessage(response.data.message);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity("error");
+      setAlertMessage("Something Went Wrong");
+      error.response.data.message
+        ? setAlertMessage(error.response.data.message)
+        : setAlertMessage(error.message);
+    } finally {
+      setLoadingStatus(false);
+    }
+  };
   const handleDropTodo = () => {
     console.log("Handle Drop Clicked");
   };
@@ -40,9 +93,10 @@ const TaskManager = () => {
   const handleDropCompleted = () => {
     console.log("Handle Drop Completed Clicked");
   };
-  const todo = data.filter(task => task.taskStatus === 'todo') || [];
-  const ongoing = data.filter(task => task.taskStatus === 'ongoing') || [];
-  const completed = data.filter(task => task.taskStatus === 'completed') || [];
+  const todo = data.filter((task) => task.taskStatus === "todo") || [];
+  const ongoing = data.filter((task) => task.taskStatus === "ongoing") || [];
+  const completed =
+    data.filter((task) => task.taskStatus === "completed") || [];
   return (
     <>
       <Box sx={{ position: "relative" }}>
@@ -117,11 +171,24 @@ const TaskManager = () => {
             color: "white",
             "&:hover": { backgroundColor: "#59e3a7" },
           }}
-          onClick={()=>setOpenModal(!openModal)}
+          onClick={() => setOpenModal(!openModal)}
         >
           <AddIcon />
         </Fab>
-        <AddTask openModal={openModal} setOpenModal={setOpenModal} />
+        <Modal
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box>
+            <FormProvider {...methods}>
+              <form onSubmit={methods.handleSubmit(onSubmit)}>
+                <AddTask setSelectedDate={setSelectedDate} selectedDate={selectedDate} />
+              </form>
+            </FormProvider>
+          </Box>
+        </Modal>
       </Box>
     </>
   );
