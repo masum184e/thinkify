@@ -10,7 +10,7 @@ const Thoughts = () => {
         alignItems: "center",
       }}
     >
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} data-aos="fade-up-left">
         <img
           style={{
             width: "100%",
@@ -21,7 +21,7 @@ const Thoughts = () => {
           alt="Insight Exchange"
         />
       </Grid>
-      <Grid item xs={12} md={6} container>
+      <Grid item xs={12} md={6} container data-aos="fade-up-right">
         <Box
           sx={{
             marginLeft: "auto",

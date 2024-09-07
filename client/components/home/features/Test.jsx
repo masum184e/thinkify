@@ -10,7 +10,7 @@ const Test = () => {
         alignItems: "center",
       }}
     >
-      <Grid item xs={12} md={6} container>
+      <Grid item xs={12} md={6} container data-aos="fade-up-left" >
         <Box
           sx={{
             marginLeft: "auto",
@@ -36,7 +36,7 @@ const Test = () => {
           </Typography>
         </Box>
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} data-aos="fade-up-right" >
         <img
           style={{
             width: "100%",

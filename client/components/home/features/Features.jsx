@@ -7,16 +7,16 @@ import Time from "./Time";
 const Features = () => {
   return (
     <Box>
-      <Box data-aos="fade-up">
+      <Box >
         <Thoughts />
       </Box>
-      <Box data-aos="fade-up">
+      <Box >
         <Test />
       </Box>
-      <Box data-aos="fade-up">
+      <Box >
         <Time />
       </Box>
-      <Box data-aos="fade-up">
+      <Box >
         <Task />
       </Box>
     </Box>

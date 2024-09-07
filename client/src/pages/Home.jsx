@@ -13,8 +13,7 @@ import NavBar from "../layouts/NavBar";
 const Home = () => {
   useEffect(() => {
     AOS.init({
-      duration: 1000,
-      once: true,
+      duration: 2000,
     });
   }, []);
   return (
