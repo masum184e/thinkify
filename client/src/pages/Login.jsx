@@ -25,11 +25,8 @@ const schema = yup.object().shape({
 
 const Login = () => {
   const navigate = useNavigate();
-  const {
-    setAlertBoxOpenStatus,
-    setAlertMessage,
-    setAlertSeverity,
-  } = useThinkify();
+  const { setAlertBoxOpenStatus, setAlertMessage, setAlertSeverity } =
+    useThinkify();
   const {
     register,
     handleSubmit,
@@ -41,6 +38,39 @@ const Login = () => {
     },
     resolver: yupResolver(schema),
   });
+  const fetchData = async () => {
+    try {
+      const response = await axios({
+        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
+        url: "/users/profile",
+        withCredentials: true,
+        method: "GET",
+      });
+      if (response.data.status) {
+        if (response.data.user.role === "user") {
+          navigate("/profile");
+        } else if (response.data.user.role === "admin") {
+          navigate("/dashboard");
+        } else {
+          setAlertBoxOpenStatus(true);
+          setAlertSeverity("error");
+          setAlertMessage("Something Went Wrong");
+        }
+      } else {
+        console.log(response.data);
+        setAlertBoxOpenStatus(true);
+        setAlertSeverity("error");
+        setAlertMessage(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity("error");
+      error.response.data.message
+        ? setAlertMessage(error.response.data.message)
+        : setAlertMessage(error.message);
+    }
+  };
   const onSubmit = async (data) => {
     try {
       const response = await axios({
@@ -50,9 +80,8 @@ const Login = () => {
         method: "POST",
         data,
       });
-      console.log(response.data);
       if (response.data.status) {
-        navigate("/profile");
+        fetchData();
       } else {
         setAlertBoxOpenStatus(true);
         setAlertSeverity("error");
@@ -70,7 +99,7 @@ const Login = () => {
   useEffect(() => {
     const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY);
     if (cookie) {
-      navigate("/profile");
+      fetchData();
     }
   }, [navigate]);
 
