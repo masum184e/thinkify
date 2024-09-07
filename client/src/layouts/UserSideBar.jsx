@@ -24,6 +24,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import useThinkify from "../hooks/useThinkify";
+import AlertBox from "../../components/common/AlertBox";
 
 const UserSideBar = ({ children }) => {
   const navigate = useNavigate();
@@ -124,6 +125,7 @@ const UserSideBar = ({ children }) => {
   return (
     <div>
       <NavBar />
+      <AlertBox />
       <Box sx={{ display: "flex", minHeight: "620px" }}>
         <Drawer
           variant="persistent"
