@@ -15,7 +15,7 @@ const Task = ({ text, taskId }) => {
 
     return (
         <div ref={drag}>
-            <ListItem sx={{ border: '1px solid #ccc', borderRadius: '5px', marginBottom: "5px" }}>
+            <ListItem sx={{ border: '1px solid #ccc', borderRadius: '5px', marginBottom: "5px", cursor:"pointer" }}>
                 <ListItemText primary={text} />
                 <IconButton color="primary">
                     <EditIcon />
