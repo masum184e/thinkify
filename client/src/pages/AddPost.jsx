@@ -1,21 +1,17 @@
 import { Box, TextField, Button, InputBase, Chip } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 import SimpleMdeReact from "react-simplemde-editor";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 import "easymde/dist/easymde.min.css";
 
-import Cookies from "js-cookie";
-
 const AddPost = () => {
   const { handleSubmit, register } = useForm();
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
   const [description, setDescription] = useState("");
-  const navigate = useNavigate();
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && tag.trim() !== "") {
@@ -36,12 +32,6 @@ const AddPost = () => {
   const onSubmit = (data) => {
     console.log(data, tags, description);
   };
-  useEffect(() => {
-    const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY);
-    if (!cookie) {
-      navigate("/login");
-    }
-  }, [navigate]);
   return (
     <>
       <Box sx={{ width: "100%" }}>

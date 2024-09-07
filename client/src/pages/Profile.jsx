@@ -1,19 +1,9 @@
 import { Box, Grid, Typography, } from '@mui/material';
 import NotesIcon from '@mui/icons-material/Notes';
 
-import { useEffect } from 'react';
-import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router-dom';
 import ProfileCardDetails from '../../components/profile/profile/ProfileCardDetails';
 
 const Profile = () => {
-    const navigate = useNavigate();
-    useEffect(() => {
-        const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY)
-        if (!cookie) {
-            navigate("/login")
-        }
-    }, [navigate])
     return (
         <Grid container  >
             <Grid item sx={{ paddingRight: "15px" }}>

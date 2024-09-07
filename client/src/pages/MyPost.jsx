@@ -11,18 +11,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
-import { useEffect } from "react";
-import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
-
 const MyPost = () => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY);
-    if (!cookie) {
-      navigate("/login");
-    }
-  }, [navigate]);
   const data = [
     {
       title: "The Rise of Artificial Intelligence: A Closer Look",
