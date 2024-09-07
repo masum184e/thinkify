@@ -11,6 +11,10 @@ import dayjs from "dayjs";
 import { useForm, FormProvider } from "react-hook-form";
 
 const TaskManager = () => {
+  const [allTask, setAllTask] = useState([]);
+  const [todo, setTodo] = useState([]);
+  const [ongoing, setOngoing] = useState([]);
+  const [completed, setCompleted] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const {
     setLoadingStatus,
@@ -19,7 +23,6 @@ const TaskManager = () => {
     setAlertSeverity,
   } = useThinkify();
   const [selectedDate, setSelectedDate] = useState(dayjs());
-  const [data, setData] = useState([]);
   const methods = useForm({
     defaultValues: {
       title: "",
@@ -36,7 +39,7 @@ const TaskManager = () => {
           withCredentials: true,
         });
         if (response.data.status) {
-          setData(response.data.tasks);
+          setAllTask(response.data.tasks);
         } else {
           console.log(response.data);
         }
@@ -45,10 +48,13 @@ const TaskManager = () => {
       }
     };
     fetchData();
-    console.log(data);
   }, []);
+  useEffect(() => {
+    setTodo(allTask.filter((task) => task.taskStatus === "todo"));
+    setOngoing(allTask.filter((task) => task.taskStatus === "ongoing"));
+    setCompleted(allTask.filter((task) => task.taskStatus === "completed"));
+  }, [allTask]);
   const onSubmit = async (data) => {
-    console.log(data, selectedDate);
     try {
       setLoadingStatus(true);
 
@@ -62,6 +68,10 @@ const TaskManager = () => {
           selectedDate,
         },
       });
+      setAllTask((prevTasks) => [
+        ...prevTasks,
+        { ...data, selectedDate, taskStatus: "todo" },
+      ]);
       if (response.data.status) {
         setOpenModal(false);
         methods.reset();
@@ -93,10 +103,7 @@ const TaskManager = () => {
   const handleDropCompleted = () => {
     console.log("Handle Drop Completed Clicked");
   };
-  const todo = data.filter((task) => task.taskStatus === "todo") || [];
-  const ongoing = data.filter((task) => task.taskStatus === "ongoing") || [];
-  const completed =
-    data.filter((task) => task.taskStatus === "completed") || [];
+
   return (
     <>
       <Box sx={{ position: "relative" }}>
@@ -184,7 +191,10 @@ const TaskManager = () => {
           <Box>
             <FormProvider {...methods}>
               <form onSubmit={methods.handleSubmit(onSubmit)}>
-                <AddTask setSelectedDate={setSelectedDate} selectedDate={selectedDate} />
+                <AddTask
+                  setSelectedDate={setSelectedDate}
+                  selectedDate={selectedDate}
+                />
               </form>
             </FormProvider>
           </Box>
