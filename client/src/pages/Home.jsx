@@ -22,8 +22,8 @@ const Home = () => {
       <NavBar />
       <Banner />
       <Features />
-      <Membership />
       <Newsletter />
+      <Membership />
       <FAQ />
       <Footer />
     </>
