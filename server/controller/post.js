@@ -38,7 +38,16 @@ const editPost = async (req, res) => {
 }
 
 const getAllPost = async (req, res) => {
+    try {
 
+        const authorId = req.user._id.toString();
+        const posts = await Post.find({ authorId });
+        res.status(200).json({ status: true, message: "Data Fetched Successfully", posts });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: "Internal Server Error" });
+    }
 }
 
 export { addPost, removePost, editPost, getAllPost };

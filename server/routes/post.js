@@ -5,7 +5,7 @@ import userAuthentication from '../middleware/userAuthentication.js';
 const post = express.Router();
 
 post.post("/", userAuthentication, addPost);
-post.get("/", getAllPost);
+post.get("/", userAuthentication, getAllPost);
 post.delete("/:postId", removePost);
 post.patch("/:postId", editPost);
 

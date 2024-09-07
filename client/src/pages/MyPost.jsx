@@ -10,40 +10,44 @@ import Paper from "@mui/material/Paper";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const MyPost = () => {
-  const data = [
-    {
-      title: "The Rise of Artificial Intelligence: A Closer Look",
-      likes: 120,
-      dislikes: 10,
-      comments: 25,
-    },
-    {
-      title: "Climate Change: Urgent Actions Needed",
-      likes: 75,
-      dislikes: 5,
-      comments: 15,
-    },
-    {
-      title: "The Impact of Social Media on Mental Health",
-      likes: 200,
-      dislikes: 20,
-      comments: 40,
-    },
-    {
-      title: "Revolutionizing Healthcare with Technology",
-      likes: 50,
-      dislikes: 2,
-      comments: 10,
-    },
-  ];
-  if(data && data.length<1){
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios({
+          baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
+          url: "/posts",
+          method: "GET",
+          withCredentials: true,
+        });
+        if (response.data.status) {
+          setData(response.data.posts);
+        } else {
+          console.log(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+  if (data && data.length < 1) {
     return (
       <Box>
-        <Typography variant="h1" textAlign="center" color="#1b2e35" component="h1">No Post Available</Typography>
+        <Typography
+          variant="h1"
+          textAlign="center"
+          color="#1b2e35"
+          component="h1"
+        >
+          No Post Available
+        </Typography>
       </Box>
-    )
+    );
   }
   return (
     <Box
@@ -91,9 +95,9 @@ const MyPost = () => {
               >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{item.title}</TableCell>
-                <TableCell>{item.likes}</TableCell>
-                <TableCell>{item.dislikes}</TableCell>
-                <TableCell>{item.comments}</TableCell>
+                <TableCell>{item.likes ? item.likes : "0"}</TableCell>
+                <TableCell>{item.dislikes ? item.dislikes : "0"}</TableCell>
+                <TableCell>{item.comments ? item.comments : "0"}</TableCell>
                 <TableCell>
                   <VisibilityOffIcon />
                 </TableCell>
