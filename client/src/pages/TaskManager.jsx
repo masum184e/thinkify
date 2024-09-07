@@ -4,10 +4,33 @@ import Task from "../../components/profile/task-management/Task";
 
 import AddIcon from "@mui/icons-material/Add";
 import AddTask from "../../components/profile/task-management/AddTask";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const TaskManager = () => {
   const [openModal, setOpenModal] = useState(false);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios({
+          baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
+          url: "/tasks",
+          method: "GET",
+          withCredentials: true,
+        });
+        if (response.data.status) {
+          setData(response.data.tasks);
+        } else {
+          console.log(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+    console.log(data)
+  }, []);
   const handleDropTodo = () => {
     console.log("Handle Drop Clicked");
   };
@@ -17,28 +40,12 @@ const TaskManager = () => {
   const handleDropCompleted = () => {
     console.log("Handle Drop Completed Clicked");
   };
-  const todo = [
-    {
-      _id: "1",
-      title: "Hello",
-    },
-  ];
-  const ongoing = [
-    {
-      _id: "1",
-      title: "Hello",
-    },
-  ];
-  const completed = [
-    {
-      _id: "1",
-      title: "Hello",
-    },
-  ];
+  const todo = data.filter(task => task.taskStatus === 'todo') || [];
+  const ongoing = data.filter(task => task.taskStatus === 'ongoing') || [];
+  const completed = data.filter(task => task.taskStatus === 'completed') || [];
   return (
     <>
       <Box sx={{ position: "relative" }}>
-        {/* <Typography variant="h2" textAlign="center" sx={{ mb: "16px", fontWeight: "bold" }}>Coordination of Work</Typography> */}
         <Grid container spacing={3}>
           <Grid item xs>
             <Box

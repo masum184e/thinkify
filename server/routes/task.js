@@ -5,7 +5,7 @@ import userAuthentication from '../middleware/userAuthentication.js';
 const task = express.Router();
 
 task.post("/", userAuthentication, addTask);
-task.get("/", getAllTask);
+task.get("/", userAuthentication, getAllTask);
 task.delete("/:taskId", removeTask);
 task.patch("/:taskId", editTask);
 
