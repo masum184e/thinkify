@@ -7,6 +7,6 @@ const task = express.Router();
 task.post("/", userAuthentication, addTask);
 task.get("/", userAuthentication, getAllTask);
 task.delete("/:taskId", removeTask);
-task.patch("/:taskId", editTask);
+task.patch("/:taskId/:taskStatus", userAuthentication, editTask);
 
 export default task;

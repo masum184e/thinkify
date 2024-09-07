@@ -94,14 +94,96 @@ const TaskManager = () => {
       setLoadingStatus(false);
     }
   };
-  const handleDropTodo = () => {
-    console.log("Handle Drop Clicked");
+  const handleDropTodo = async (taskId) => {
+    try {
+      setLoadingStatus(true);
+      const response = await axios({
+        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
+        url: `/tasks/${taskId}/todo`,
+        withCredentials: true,
+        method: "PATCH",
+      });
+      const updatedTasks = allTask.map((task) =>
+        task._id === taskId ? { ...task, taskStatus: "todo" } : task
+      );
+      setAllTask(updatedTasks);
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity(response.data.status ? "success" : "error");
+      setAlertMessage(response.data.message);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity("error");
+      setAlertMessage("Something Went Wrong");
+      error.response.data.message
+        ? setAlertMessage(error.response.data.message)
+        : setAlertMessage(error.message);
+    } finally {
+      setLoadingStatus(false);
+    }
   };
-  const handleDropOngoing = () => {
-    console.log("Handle Drop On Going Clicked");
+  const handleDropOngoing = async (taskId) => {
+    try {
+      setLoadingStatus(true);
+      const response = await axios({
+        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
+        url: `/tasks/${taskId}/ongoing`,
+        withCredentials: true,
+        method: "PATCH",
+      });
+      const updatedTasks = allTask.map((task) =>
+        task._id === taskId ? { ...task, taskStatus: "ongoing" } : task
+      );
+      setAllTask(updatedTasks);
+      setAllTask(updatedTasks);
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity(response.data.status ? "success" : "error");
+      setAlertMessage(response.data.message);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity("error");
+      setAlertMessage("Something Went Wrong");
+      error.response.data.message
+        ? setAlertMessage(error.response.data.message)
+        : setAlertMessage(error.message);
+    } finally {
+      setLoadingStatus(false);
+    }
   };
-  const handleDropCompleted = () => {
-    console.log("Handle Drop Completed Clicked");
+  const handleDropCompleted = async (taskId) => {
+    try {
+      setLoadingStatus(true);
+      const response = await axios({
+        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
+        url: `/tasks/${taskId}/completed`,
+        withCredentials: true,
+        method: "PATCH",
+      });
+      const updatedTasks = allTask.map((task) =>
+        task._id === taskId ? { ...task, taskStatus: "completed" } : task
+      );
+      setAllTask(updatedTasks);
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity(response.data.status ? "success" : "error");
+      setAlertMessage(response.data.message);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity("error");
+      setAlertMessage("Something Went Wrong");
+      error.response.data.message
+        ? setAlertMessage(error.response.data.message)
+        : setAlertMessage(error.message);
+    } finally {
+      setLoadingStatus(false);
+    }
   };
 
   return (
