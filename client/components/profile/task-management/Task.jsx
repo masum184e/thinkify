@@ -4,14 +4,11 @@ import { ListItem, ListItemText, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-const Task = ({ text, taskId }) => {
+const Task = ({ text, taskId, handleDelete }) => {
     const [, drag] = useDrag({
         type: 'TASK_ITEM',
         item: { taskId },
     });
-    const handleDelete = (taskId) => {
-        console.log(`${taskId} Clicked`)
-    }
 
     return (
         <div ref={drag}>
@@ -31,6 +28,7 @@ const Task = ({ text, taskId }) => {
 Task.propTypes = {
     text: PropTypes.string.isRequired,
     taskId: PropTypes.string.isRequired,
+    handleDelete: PropTypes.func.isRequired,
 };
 
 export default Task;

@@ -125,6 +125,9 @@ const TaskManager = () => {
       setLoadingStatus(false);
     }
   };
+  const handleDelete = async (taskId) => {
+    console.log(`${taskId} clicked`);
+  };
 
   return (
     <>
@@ -168,21 +171,36 @@ const TaskManager = () => {
           <Grid item xs>
             <List>
               {todo.map((item) => (
-                <Task key={item._id} text={item.title} taskId={item._id} />
+                <Task
+                  key={item._id}
+                  text={item.title}
+                  taskId={item._id}
+                  handleDelete={handleDelete}
+                />
               ))}
             </List>
           </Grid>
           <Grid item xs>
             <List>
               {ongoing.map((item) => (
-                <Task key={item._id} text={item.title} taskId={item._id} />
+                <Task
+                  key={item._id}
+                  text={item.title}
+                  taskId={item._id}
+                  handleDelete={handleDelete}
+                />
               ))}
             </List>
           </Grid>
           <Grid item xs>
             <List>
               {completed.map((item) => (
-                <Task key={item._id} text={item.title} taskId={item._id} />
+                <Task
+                  key={item._id}
+                  text={item.title}
+                  taskId={item._id}
+                  handleDelete={handleDelete}
+                />
               ))}
             </List>
           </Grid>
