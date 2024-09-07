@@ -94,78 +94,18 @@ const TaskManager = () => {
       setLoadingStatus(false);
     }
   };
-  const handleDropTodo = async (taskId) => {
+
+  const handleDrop = async (taskId, status) => {
     try {
       setLoadingStatus(true);
       const response = await axios({
         baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-        url: `/tasks/${taskId}/todo`,
+        url: `/tasks/${taskId}/${status}`,
         withCredentials: true,
         method: "PATCH",
       });
       const updatedTasks = allTask.map((task) =>
-        task._id === taskId ? { ...task, taskStatus: "todo" } : task
-      );
-      setAllTask(updatedTasks);
-      setLoadingStatus(false);
-      setAlertBoxOpenStatus(true);
-      setAlertSeverity(response.data.status ? "success" : "error");
-      setAlertMessage(response.data.message);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setLoadingStatus(false);
-      setAlertBoxOpenStatus(true);
-      setAlertSeverity("error");
-      setAlertMessage("Something Went Wrong");
-      error.response.data.message
-        ? setAlertMessage(error.response.data.message)
-        : setAlertMessage(error.message);
-    } finally {
-      setLoadingStatus(false);
-    }
-  };
-  const handleDropOngoing = async (taskId) => {
-    try {
-      setLoadingStatus(true);
-      const response = await axios({
-        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-        url: `/tasks/${taskId}/ongoing`,
-        withCredentials: true,
-        method: "PATCH",
-      });
-      const updatedTasks = allTask.map((task) =>
-        task._id === taskId ? { ...task, taskStatus: "ongoing" } : task
-      );
-      setAllTask(updatedTasks);
-      setAllTask(updatedTasks);
-      setLoadingStatus(false);
-      setAlertBoxOpenStatus(true);
-      setAlertSeverity(response.data.status ? "success" : "error");
-      setAlertMessage(response.data.message);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setLoadingStatus(false);
-      setAlertBoxOpenStatus(true);
-      setAlertSeverity("error");
-      setAlertMessage("Something Went Wrong");
-      error.response.data.message
-        ? setAlertMessage(error.response.data.message)
-        : setAlertMessage(error.message);
-    } finally {
-      setLoadingStatus(false);
-    }
-  };
-  const handleDropCompleted = async (taskId) => {
-    try {
-      setLoadingStatus(true);
-      const response = await axios({
-        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-        url: `/tasks/${taskId}/completed`,
-        withCredentials: true,
-        method: "PATCH",
-      });
-      const updatedTasks = allTask.map((task) =>
-        task._id === taskId ? { ...task, taskStatus: "completed" } : task
+        task._id === taskId ? { ...task, taskStatus: status } : task
       );
       setAllTask(updatedTasks);
       setLoadingStatus(false);
@@ -198,7 +138,7 @@ const TaskManager = () => {
                 backgroundColor: "#59e3a7",
               }}
             >
-              <TaskStatus status="todo" onDrop={handleDropTodo} />
+              <TaskStatus status="todo" onDrop={handleDrop} />
             </Box>
           </Grid>
           <Grid item xs>
@@ -209,7 +149,7 @@ const TaskManager = () => {
                 backgroundColor: "#00844b",
               }}
             >
-              <TaskStatus status="ongoing" onDrop={handleDropOngoing} />
+              <TaskStatus status="ongoing" onDrop={handleDrop} />
             </Box>
           </Grid>
           <Grid item xs>
@@ -220,7 +160,7 @@ const TaskManager = () => {
                 backgroundColor: "#28483a",
               }}
             >
-              <TaskStatus status="completed" onDrop={handleDropCompleted} />
+              <TaskStatus status="completed" onDrop={handleDrop} />
             </Box>
           </Grid>
         </Grid>

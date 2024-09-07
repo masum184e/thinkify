@@ -8,7 +8,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 const TaskStatus = ({ onDrop, status }) => {
     const [, drop] = useDrop({
         accept: 'TASK_ITEM',
-        drop: (item) => onDrop(item.taskId),
+        drop: (item) => onDrop(item.taskId, status),
     });
 
     return (
