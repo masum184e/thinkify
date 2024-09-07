@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -49,7 +49,13 @@ const MyPost = () => {
       comments: 10,
     },
   ];
-
+  if(data && data.length<1){
+    return (
+      <Box>
+        <Typography variant="h1" textAlign="center" color="#1b2e35" component="h1">No Post Available</Typography>
+      </Box>
+    )
+  }
   return (
     <Box
       sx={{
