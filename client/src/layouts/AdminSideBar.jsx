@@ -19,13 +19,14 @@ import Footer from "../../components/home/footer/Footer";
 import axios from "axios";
 import useThinkify from "../hooks/useThinkify";
 import Cookies from "js-cookie";
+import { useEffect } from "react";
 
 const AdminSideBar = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const { setAlertBoxOpenStatus, setAlertMessage, setAlertSeverity } =
-      useThinkify();
-      const listData = [
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { setAlertBoxOpenStatus, setAlertMessage, setAlertSeverity } =
+    useThinkify();
+  const listData = [
     {
       label: "My Profile",
       url: "/dashboard",
@@ -40,7 +41,7 @@ const AdminSideBar = () => {
       label: "Reports",
       url: "/dashboard/reports",
       icon: <ReportIcon />,
-    }
+    },
   ];
   const handleLogOut = async () => {
     try {
@@ -70,6 +71,34 @@ const AdminSideBar = () => {
         : setAlertMessage(error.message);
     }
   };
+
+  const fetchData = async () => {
+    try {
+      const response = await axios({
+        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
+        url: "/admin/profile",
+        withCredentials: true,
+        method: "GET",
+      });
+      if (response.data.status && response.data.user.role !== "user") {
+        Cookies.remove(import.meta.env.VITE_COOKIE_KEY);
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      Cookies.remove(import.meta.env.VITE_COOKIE_KEY);
+      navigate("/login");
+    }
+  };
+
+  useEffect(() => {
+    const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY);
+    if (cookie) {
+      fetchData();
+    } else {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   return (
     <div>
