@@ -1,17 +1,26 @@
+import { useEffect } from "react"; // Import useEffect
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import Banner from "../../components/home/Banner";
 import FAQ from "../../components/home/FAQ";
-import Thoughts from "../../components/home/features/Thoughts";
+import Features from "../../components/home/features/Features";
 import Footer from "../../components/home/footer/Footer";
 import Membership from "../../components/home/membership/Membership";
 import Newsletter from "../../components/home/Newsletter";
 import NavBar from "../layouts/NavBar";
 
 const Home = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+    });
+  }, []);
   return (
     <>
       <NavBar />
       <Banner />
-      <Thoughts />
+      <Features />
       <Membership />
       <Newsletter />
       <FAQ />
