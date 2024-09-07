@@ -98,6 +98,7 @@ const AddPost = () => {
       setLoadingStatus(false);
       setAlertBoxOpenStatus(true);
       setAlertSeverity("error");
+      setAlertMessage("Something Went Wrong")
       error.response.data.message
         ? setAlertMessage(error.response.data.message)
         : setAlertMessage(error.message);

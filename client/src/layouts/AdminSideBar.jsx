@@ -66,6 +66,7 @@ const AdminSideBar = () => {
       console.error("Error fetching data:", error);
       setAlertBoxOpenStatus(true);
       setAlertSeverity("error");
+      setAlertMessage("Something Went Wrong")
       error.response.data.message
         ? setAlertMessage(error.response.data.message)
         : setAlertMessage(error.message);
