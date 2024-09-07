@@ -21,9 +21,16 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import NavBar from "./NavBar";
 import Footer from "../../components/home/footer/Footer";
 import axios from "axios";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import useThinkify from "../hooks/useThinkify";
 
 const UserSideBar = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { setAlertBoxOpenStatus, setAlertMessage, setAlertSeverity } =
+    useThinkify();
+
   const listData = [
     {
       label: "My Profile",
@@ -58,21 +65,62 @@ const UserSideBar = ({ children }) => {
   ];
 
   const handleLogOut = async () => {
-    const response = await axios({
-      baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-      url: "/users/log-out",
-      withCredentials: true,
-      method: "GET",
-    });
-    if (response.data.status) {
-      console.log(response.data.message);
-      navigate("/login");
-    } else {
-      console.log(response.data);
+    try {
+      const response = await axios({
+        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
+        url: "/users/log-out",
+        withCredentials: true,
+        method: "GET",
+      });
+      if (response.data.status) {
+        setAlertBoxOpenStatus(true);
+        setAlertSeverity("success");
+        setAlertMessage(response.data.message);
+        Cookies.remove(import.meta.env.VITE_COOKIE_KEY);
+        navigate("/login");
+      } else {
+        setAlertBoxOpenStatus(true);
+        setAlertSeverity("error");
+        setAlertMessage(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity("error");
+      error.response.data.message
+        ? setAlertMessage(error.response.data.message)
+        : setAlertMessage(error.message);
     }
   };
 
-  const location = useLocation();
+  const fetchData = async () => {
+    try {
+      const response = await axios({
+        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
+        url: "/users/profile",
+        withCredentials: true,
+        method: "GET",
+      });
+      if (response.data.status && response.data.user.role !== "user") {
+        Cookies.remove(import.meta.env.VITE_COOKIE_KEY);
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      Cookies.remove(import.meta.env.VITE_COOKIE_KEY);
+      navigate("/login");
+    }
+  };
+
+  useEffect(() => {
+    const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY);
+    if (cookie) {
+      fetchData();
+    } else {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   return (
     <div>
       <NavBar />
