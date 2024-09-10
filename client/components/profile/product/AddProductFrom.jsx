@@ -1,15 +1,61 @@
 import { Box, Button, TextField, IconButton, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useFormContext } from "react-hook-form";
+import axios from "axios";
+import useThinkify from "../../../src/hooks/useThinkify";
 
 const AddProductForm = () => {
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useFormContext();
-  const onSubmit = (data) => {
-    const formData = new FormData();
+  const {
+    setLoadingStatus,
+    setAlertBoxOpenStatus,
+    setAlertMessage,
+    setAlertSeverity,
+  } = useThinkify();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    formState: { errors },
+  } = useFormContext();
+  const onSubmit = async (data) => {
+    const formPayload = new FormData();
     if (data.productimage && data.productimage[0] instanceof File) {
-      formData.append("file", data.productimage[0]);
+      formPayload.append("productimage", data.productimage[0]);
     }
-    console.log(data);
+    formPayload.append("title", data.title);
+    formPayload.append("price", data.price);
+    formPayload.append("description", data.description);
+
+    try{
+      const response = await axios({
+        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
+        url: "/products",
+        withCredentials: true,
+        method: "POST",
+        data: formPayload,
+      });
+      if (response.data.status) {
+        reset();
+      }
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity(response.data.status ? "success" : "error");
+      setAlertMessage(response.data.message);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity("error");
+      setAlertMessage("Something Went Wrong")
+      error.response.data.message
+        ? setAlertMessage(error.response.data.message)
+        : setAlertMessage(error.message);
+    } finally {
+      setLoadingStatus(false);
+    }
+
   };
 
   const productImage = watch("productimage");
@@ -60,15 +106,19 @@ const AddProductForm = () => {
                 required: "File is required",
                 validate: {
                   validFileType: (value) =>
-                    value &&
-                    value.length > 0 &&
-                    ["image/jpeg", "image/png"].includes(value[0].type) ||
+                    (value &&
+                      value.length > 0 &&
+                      ["image/jpeg", "image/png"].includes(value[0].type)) ||
                     "Only JPEG and PNG files are allowed",
                 },
               })}
             />
             {errors.productimage && (
-              <Typography color="error" variant="body2" sx={{ marginBottom: 1 }}>
+              <Typography
+                color="error"
+                variant="body2"
+                sx={{ marginBottom: 1 }}
+              >
                 {errors.productimage.message}
               </Typography>
             )}
