@@ -221,8 +221,8 @@ const AddPost = () => {
             sx={{
               mt: 2,
               color: "white",
-              backgroundColor: "#1b2e35",
-              "&:hover": { backgroundColor: "#1b2e35" },
+              backgroundColor: "#59e3a7",
+              "&:hover": { backgroundColor: "#59e3a7" },
             }}
           >
             Post
