@@ -20,7 +20,12 @@ const PreviewProduct = () => {
         variant="h2"
         sx={{ fontSize: "30px", fontWeight: "thin", color: "#8db4a3" }}
       >
-        Preview
+        {watch("title") ||
+        productImageUrl ||
+        watch("price") ||
+        watch("description")
+          ? "Preview"
+          : ""}
       </Typography>
       <Box
         sx={{
