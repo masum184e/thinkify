@@ -6,8 +6,8 @@ import uploadFile from '../middleware/uploadFile.js';
 const product = express.Router();
 
 product.post("/", userAuthentication, uploadFile.single("productimage"), addProduct)
-product.get("/", getAllProduct);
-product.delete("/:productId", removeProduct);
-product.patch("/:productId", editProduct);
+product.get("/", userAuthentication, getAllProduct);
+product.delete("/:productId", userAuthentication, removeProduct);
+product.patch("/:productId", userAuthentication, editProduct);
 
 export default product;

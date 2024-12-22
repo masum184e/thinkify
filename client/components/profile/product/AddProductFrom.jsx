@@ -3,6 +3,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useFormContext } from "react-hook-form";
 import axios from "axios";
 import useThinkify from "../../../src/hooks/useThinkify";
+import Cookies from 'js-cookie'
 
 const AddProductForm = () => {
   const {
@@ -29,13 +30,16 @@ const AddProductForm = () => {
     formPayload.append("description", data.description);
 
     try{
-      const response = await axios({
-        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-        url: "/products",
-        withCredentials: true,
-        method: "POST",
-        data: formPayload,
-      });
+      setLoadingStatus(true);
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_ENDPOINT}/products`,
+        formPayload,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_TOKEN_KEY)}`,
+          },
+        }
+      );
       if (response.data.status) {
         reset();
       }
