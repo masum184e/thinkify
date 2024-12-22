@@ -34,7 +34,6 @@ const removePost = async (req, res) => {
     
         const postId = req.params.postId;
         const authorId = req.user._id.toString();
-        console.log(postId, authorId);
         const post = await PostModel.findOne({ _id: postId, authorId });
         if (!post) {
             return res.status(404).json({ status: false, message: "Post not found" });
