@@ -58,7 +58,7 @@ const ChangePassword = () => {
                 onClick={() => setShowOldPassword(!showOldPassword)}
                 onMouseDown={handleMouseDownPassword}
               >
-                {showOldPassword ? <VisibilityOff /> : <Visibility />}
+                {showOldPassword ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             </InputAdornment>
           ),
@@ -82,7 +82,7 @@ const ChangePassword = () => {
                 onClick={() => setShowNewPassword(!showNewPassword)}
                 onMouseDown={handleMouseDownPassword}
               >
-                {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                {showNewPassword ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             </InputAdornment>
           ),
@@ -106,7 +106,7 @@ const ChangePassword = () => {
                 onClick={() => setShowRetypePassword(!showRetypePassword)}
                 onMouseDown={handleMouseDownPassword}
               >
-                {showRetypePassword ? <VisibilityOff /> : <Visibility />}
+                {showRetypePassword ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             </InputAdornment>
           ),
