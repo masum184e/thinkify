@@ -12,18 +12,23 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const MyPost = () => {
   const [data, setData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios({
-          baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-          url: "/posts",
-          method: "GET",
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_SERVER_ENDPOINT}/posts`,
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get(
+                import.meta.env.VITE_TOKEN_KEY
+              )}`,
+            },
+          }
+        );
         if (response.data.status) {
           setData(response.data.posts);
         } else {
@@ -61,7 +66,7 @@ const MyPost = () => {
       }}
     >
       <TableContainer component={Paper} sx={{ width: "100%" }}>
-        <Table aria-label="simple table" fullWidth>
+        <Table aria-label="simple table">
           <TableHead sx={{ backgroundColor: "#59e3a7", position: "sticky" }}>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold", color: "white" }}>
@@ -90,7 +95,7 @@ const MyPost = () => {
           <TableBody>
             {data.map((item, index) => (
               <TableRow
-                key={item.title}
+                key={item._id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell>{index + 1}</TableCell>

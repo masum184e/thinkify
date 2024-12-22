@@ -15,6 +15,7 @@ import DOMPurify from "dompurify";
 import "easymde/dist/easymde.min.css";
 import useThinkify from "../hooks/useThinkify";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const AddPost = () => {
   const {
@@ -38,11 +39,15 @@ const AddPost = () => {
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && tag.trim() !== "") {
       event.preventDefault();
-      setTags([...tags, tag.trim()]);
+      if (!tags.includes(tag.trim())) {
+        setTags([...tags, tag.trim()]);
+      }
       setTag("");
       clearErrors("tags");
     }
   };
+  
+  
 
   const renderMarkdown = () => {
     const html = marked(description);
@@ -62,8 +67,8 @@ const AddPost = () => {
       });
       return;
     }
-
-    if (description.trim().length === 0) {
+    const trimmedDescription = description.trim();
+    if (trimmedDescription.length === 0) {
       setError("description", {
         type: "manual",
         message: "Description is required",
@@ -73,17 +78,20 @@ const AddPost = () => {
 
     try {
       setLoadingStatus(true);
-      const response = await axios({
-        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-        url: "/posts",
-        withCredentials: true,
-        method: "POST",
-        data: {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_ENDPOINT}/posts`,
+        {
           title: data.title,
           tags,
-          description,
+          description: trimmedDescription,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get(import.meta.env.VITE_TOKEN_KEY)}`,
+          },
+        }
+      );
+      
       if (response.data.status) {
         reset();
         setTags([]);
@@ -98,7 +106,7 @@ const AddPost = () => {
       setLoadingStatus(false);
       setAlertBoxOpenStatus(true);
       setAlertSeverity("error");
-      setAlertMessage("Something Went Wrong")
+      setAlertMessage("Something Went Wrong");
       error.response.data.message
         ? setAlertMessage(error.response.data.message)
         : setAlertMessage(error.message);
