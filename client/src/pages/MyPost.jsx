@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import useThinkify from "../hooks/useThinkify";
+import { Link } from "react-router-dom";
 
 const MyPost = () => {
   const [data, setData] = useState([]);
@@ -149,7 +150,7 @@ const MyPost = () => {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{item.title}</TableCell>
+                <TableCell><Link style={{color:"inherit"}} to={`/posts/${item._id}`} >{item.title}</Link></TableCell>
                 <TableCell>{item.likes ? item.likes : "0"}</TableCell>
                 <TableCell>{item.dislikes ? item.dislikes : "0"}</TableCell>
                 <TableCell>{item.comments ? item.comments : "0"}</TableCell>
