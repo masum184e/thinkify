@@ -113,4 +113,38 @@ const getUserData = async (req, res) => {
 
 // }
 
-export { registration, login, getUserData }
+const changePassword = async (req, res) => {
+    try {
+        const { oldPassword, newPassword } = req.body;
+        if (!oldPassword || !newPassword) {
+            return res.status(400).json({ status: false, message: "All fields are required" });
+        }
+
+        const existingUser = await UserModel.findById(req.user._id);
+        if (!existingUser) {
+            return res.status(401).json({ status: false, message: "User does not exist" });
+        }
+
+        const isMatch = await bcrypt.compare(oldPassword, existingUser.password);
+        if (!isMatch) {
+            return res.status(401).json({ status: false, message: "Wrong Password" });
+        }
+
+        const bcryptSaltRounds = parseInt(process.env.BCRYPT_GEN_SALT_NUMBER);
+        const bcryptSalt = await bcrypt.genSalt(bcryptSaltRounds);
+        const hashPassword = await bcrypt.hash(newPassword, bcryptSalt);
+
+        const updatedUser = await UserModel.findByIdAndUpdate(req.user._id, { password: hashPassword }, { new: true });
+        if (updatedUser) {
+            res.status(200).json({ status: true, message: "Password Changed Successfully" });
+        } else {
+            res.status(500).json({ status: false, message: "Something Went Wrong" });
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: "Internal Server Error" });
+    }
+}
+
+export { registration, login, getUserData, changePassword }

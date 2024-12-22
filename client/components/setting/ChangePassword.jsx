@@ -8,22 +8,63 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import useThinkify from "../../src/hooks/useThinkify";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const ChangePassword = () => {
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm();
+  const {
+    setLoadingStatus,
+    setAlertBoxOpenStatus,
+    setAlertMessage,
+    setAlertSeverity,
+  } = useThinkify();
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showRetypePassword, setShowRetypePassword] = useState(false);
 
   const handleMouseDownPassword = (event) => event.preventDefault();
 
-  const onSubmit = (data) => {
-    console.log("Form data: ", data);
+  const onSubmit = async (data) => {
+    try {
+      setLoadingStatus(true);
+      const response = await axios.put(
+        `${import.meta.env.VITE_SERVER_ENDPOINT}/users/change-password`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get(
+              import.meta.env.VITE_TOKEN_KEY
+            )}`,
+          },
+        }
+      );
+      if (response.data.status) {
+        reset();
+      }
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity(response.data.status ? "success" : "error");
+      setAlertMessage(response.data.message);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity("error");
+      setAlertMessage("Something Went Wrong");
+      error.response.data.message
+        ? setAlertMessage(error.response.data.message)
+        : setAlertMessage(error.message);
+    } finally {
+      setLoadingStatus(false);
+    }
   };
 
   const validateNewPassword = (value) => {
