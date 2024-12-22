@@ -9,7 +9,7 @@ import axios from "axios";
 import useThinkify from "../hooks/useThinkify";
 import dayjs from "dayjs";
 import { useForm, FormProvider } from "react-hook-form";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 const TaskManager = () => {
   const [allTask, setAllTask] = useState([]);
@@ -33,12 +33,16 @@ const TaskManager = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios({
-          baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-          url: "/tasks",
-          method: "GET",
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_SERVER_ENDPOINT}/tasks`,
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get(
+                import.meta.env.VITE_TOKEN_KEY
+              )}`,
+            },
+          }
+        );
         if (response.data.status) {
           setAllTask(response.data.tasks);
         } else {
@@ -100,12 +104,17 @@ const TaskManager = () => {
   const handleDrop = async (taskId, status) => {
     try {
       setLoadingStatus(true);
-      const response = await axios({
-        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-        url: `/tasks/${taskId}/${status}`,
-        withCredentials: true,
-        method: "PATCH",
-      });
+      const response = await axios.patch(
+        `${import.meta.env.VITE_SERVER_ENDPOINT}/tasks/${taskId}/${status}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get(
+              import.meta.env.VITE_TOKEN_KEY
+            )}`,
+          },
+        }
+      );
       const updatedTasks = allTask.map((task) =>
         task._id === taskId ? { ...task, taskStatus: status } : task
       );
