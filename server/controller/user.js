@@ -61,7 +61,7 @@ const login = async (req, res) => {
         }
 
         const existingUser = await UserModel.findOne({ email });
-        if (!existingUser || existingUser.role !== "user") {
+        if (!existingUser) {
             return res.status(401).json({ status: false, message: "Invalid Email or User does not exist" });
         }
 
