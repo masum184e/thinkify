@@ -137,7 +137,41 @@ const TaskManager = () => {
     }
   };
   const handleDelete = async (taskId) => {
-    console.log(`${taskId} clicked`);
+    try {
+      setLoadingStatus(true);
+      const response = await axios.delete(
+        `${import.meta.env.VITE_SERVER_ENDPOINT}/tasks/${taskId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get(
+              import.meta.env.VITE_TOKEN_KEY
+            )}`,
+          },
+        }
+      );
+      if (response.data.status) {
+        setAllTask(allTask.filter((item) => item._id !== taskId));
+        setAlertBoxOpenStatus(true);
+        setAlertSeverity("success");
+        setAlertMessage(response.data.message);
+      } else {
+        setLoadingStatus(false);
+        console.log(response.data);
+        setAlertBoxOpenStatus(true);
+        setAlertSeverity("error");
+        setAlertMessage(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity("error");
+      setAlertMessage("Something Went Wrong");
+      // server error message with status code
+      error.response.data.message
+        ? setAlertMessage(error.response.data.message)
+        : setAlertMessage(error.message);
+    }
   };
 
   return (
