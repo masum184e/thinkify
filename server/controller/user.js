@@ -35,13 +35,14 @@ const registration = [
             const savedUser = await userData.save();
             if (savedUser) {
                 const token = jwt.sign({ userId: savedUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.TOKEN_EXPIRES });
-                const expires = new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRES)) * 24 * 60 * 60 * 1000);
-                res.cookie(process.env.COOKIE_KEY, token, {
-                    httpOnly: false,
-                    secure: true,
-                    sameSite: 'none',
-                    expires
-                }).status(200).json({ status: true, message: "Registration Successful" });
+                // const expires = new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRES)) * 24 * 60 * 60 * 1000);
+                // res.cookie(process.env.COOKIE_KEY, token, {
+                //     httpOnly: false,
+                //     secure: true,
+                //     sameSite: 'none',
+                //     expires
+                // }).status(200).json({ status: true, message: "Registration Successful" });
+                res.json({ status: true, message: "Registration Successful", token });
             } else {
                 res.status(500).json({ status: false, message: "Something Went Wrong" });
             }
@@ -70,13 +71,14 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign({ userId: existingUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.TOKEN_EXPIRES || '1h' });
-        const expires = new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRES)) * 24 * 60 * 60 * 1000);
-        res.cookie(process.env.COOKIE_KEY, token, {
-            // httpOnly: false,
-            // secure: true,
-            // sameSite: 'none',
-            expires
-        }).status(200).json({ status: true, message: "Login Successful" });
+        // const expires = new Date(Date.now() + (parseInt(process.env.COOKIE_EXPIRES)) * 24 * 60 * 60 * 1000);
+        // res.cookie(process.env.COOKIE_KEY, token, {
+        //     httpOnly: false,
+        //     secure: true,
+        //     sameSite: 'none',
+        //     expires
+        // }).status(200).json({ status: true, message: "Login Successful" });
+        res.status(200).json({ status: true, message: "Login Successful", token, user: existingUser });
 
     } catch (error) {
         console.error(error);

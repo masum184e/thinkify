@@ -5,30 +5,36 @@ import UserModel from "../models/userSchema.js";
 
 const userAuthentication = async (req, res, next) => {
     try {
-        const cookieKey = process.env.COOKIE_KEY;
-        const authorizationToken = req.cookies[cookieKey];
-        if (authorizationToken) {
+        const authorization = req.headers['authorization'];
+        if (authorization && authorization.startsWith("Bearer ")) {
+          
+            const authorizationToken = authorization.split(" ")[1];
+            if (authorizationToken) {
 
-            const { userId } = jwt.verify(authorizationToken, process.env.JWT_SECRET_KEY)
-            if (Types.ObjectId.isValid(userId)) {
+                const { userId } = jwt.verify(authorizationToken, process.env.JWT_SECRET_KEY)
+                if (Types.ObjectId.isValid(userId)) {
 
-                const user = await UserModel.findById(userId).select("-password");
-                if (user.role === "user") {
-                    req.user = user
-                    next();
+                    const user = await UserModel.findById(userId).select("-password");
+                    if (user.role === "user") {
+                        req.user = user
+                        next();
+                    } else {
+                        return res.status(403).json({ "status": false, "message": "Invalid Request" });
+                    }
+
                 } else {
                     return res.status(403).json({ "status": false, "message": "Invalid Request" });
                 }
 
             } else {
-                return res.status(403).json({ "status": false, "message": "Invalid Request" });
+                res.status(401).json({ "status": false, "message": "Authorization Failed" });
             }
-
         } else {
-            res.status(401).json({ "status": false, "message": "Authorization Failed" });
+            throw new Error("Unauthorized User");
         }
 
     } catch (error) {
+        console.log(error)
         res.status(500).json({ "status": false, "message": "Internal Server Error", "error": error });
     }
 }

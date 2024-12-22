@@ -20,11 +20,10 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 import NavBar from "./NavBar";
 import Footer from "../../components/home/footer/Footer";
-import axios from "axios";
-import { useEffect } from "react";
 import Cookies from "js-cookie";
 import useThinkify from "../hooks/useThinkify";
 import AlertBox from "../../components/common/AlertBox";
+import { useEffect } from "react";
 
 const UserSideBar = ({ children }) => {
   const navigate = useNavigate();
@@ -66,62 +65,30 @@ const UserSideBar = ({ children }) => {
   ];
 
   const handleLogOut = async () => {
-    try {
-      const response = await axios({
-        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-        url: "/users/log-out",
-        withCredentials: true,
-        method: "GET",
-      });
-      if (response.data.status) {
-        setAlertBoxOpenStatus(true);
-        setAlertSeverity("success");
-        setAlertMessage(response.data.message);
-        Cookies.remove(import.meta.env.VITE_COOKIE_KEY);
-        navigate("/login");
-      } else {
-        setAlertBoxOpenStatus(true);
-        setAlertSeverity("error");
-        setAlertMessage(response.data.message);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setAlertBoxOpenStatus(true);
-      setAlertSeverity("error");
-      setAlertMessage("Something Went Wrong")
-      error.response.data.message
-        ? setAlertMessage(error.response.data.message)
-        : setAlertMessage(error.message);
-    }
+    setAlertBoxOpenStatus(true);
+    setAlertSeverity("success");
+    setAlertMessage("Logged Out Successfully");
+    Cookies.remove(import.meta.env.VITE_TOKEN_KEY, { path: "" });
+    Cookies.remove(import.meta.env.VITE_USER_ROLE, { path: "" });
+    navigate("/login");
   };
 
-  const fetchData = async () => {
-    try {
-      const response = await axios({
-        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-        url: "/users/profile",
-        withCredentials: true,
-        method: "GET",
-      });
-      if (response.data.status && response.data.user.role !== "user") {
-        Cookies.remove(import.meta.env.VITE_COOKIE_KEY);
-        navigate("/login");
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      Cookies.remove(import.meta.env.VITE_COOKIE_KEY);
-      navigate("/login");
-    }
-  };
-
+  // check if user is already logged in
   useEffect(() => {
-    const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY);
-    if (cookie) {
-      fetchData();
+    const token = Cookies.get(import.meta.env.VITE_TOKEN_KEY);
+    const role = Cookies.get(import.meta.env.VITE_USER_ROLE);
+    if (token && role) {
+      if (role === "user") {
+        navigate("/profile");
+      } else if (role === "admin") {
+        navigate("/dashboard");
+      }
     } else {
+      Cookies.remove(import.meta.env.VITE_TOKEN_KEY, { path: "" });
+      Cookies.remove(import.meta.env.VITE_USER_ROLE, { path: "" });
       navigate("/login");
     }
-  }, [navigate]);
+  }, []);
 
   return (
     <div>

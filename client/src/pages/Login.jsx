@@ -25,8 +25,10 @@ const schema = yup.object().shape({
 
 const Login = () => {
   const navigate = useNavigate();
+  // alert message
   const { setAlertBoxOpenStatus, setAlertMessage, setAlertSeverity } =
     useThinkify();
+  // form validation
   const {
     register,
     handleSubmit,
@@ -38,15 +40,23 @@ const Login = () => {
     },
     resolver: yupResolver(schema),
   });
-  const fetchData = async () => {
+
+  // form submit
+  const onSubmit = async (data) => {
     try {
-      const response = await axios({
-        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-        url: "/users/profile",
-        withCredentials: true,
-        method: "GET",
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_ENDPOINT}/users/login`,
+        data
+      );
       if (response.data.status) {
+        Cookies.set(import.meta.env.VITE_TOKEN_KEY, response.data.token, {
+          expires: Number(import.meta.env.VITE_COOKIE_EXPIRES),
+          path: "",
+        });
+        Cookies.set(import.meta.env.VITE_USER_ROLE, response.data.user.role, {
+          expires: Number(import.meta.env.VITE_COOKIE_EXPIRES),
+          path: "",
+        });
         if (response.data.user.role === "user") {
           navigate("/profile");
         } else if (response.data.user.role === "admin") {
@@ -57,33 +67,6 @@ const Login = () => {
           setAlertMessage("Something Went Wrong");
         }
       } else {
-        console.log(response.data);
-        setAlertBoxOpenStatus(true);
-        setAlertSeverity("error");
-        setAlertMessage(response.data.message);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setAlertBoxOpenStatus(true);
-      setAlertSeverity("error");
-      setAlertMessage("Something Went Wrong")
-      error.response.data.message
-        ? setAlertMessage(error.response.data.message)
-        : setAlertMessage(error.message);
-    }
-  };
-  const onSubmit = async (data) => {
-    try {
-      const response = await axios({
-        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-        url: "/users/login",
-        withCredentials: true,
-        method: "POST",
-        data,
-      });
-      if (response.data.status) {
-        fetchData();
-      } else {
         setAlertBoxOpenStatus(true);
         setAlertSeverity("error");
         setAlertMessage(response.data.message);
@@ -93,17 +76,28 @@ const Login = () => {
       setAlertBoxOpenStatus(true);
       setAlertSeverity("error");
       setAlertMessage("Something Went Wrong");
+      // server error message with status code
       error.response.data.message
         ? setAlertMessage(error.response.data.message)
         : setAlertMessage(error.message);
     }
   };
+
+  // check if user is already logged in
   useEffect(() => {
-    const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY);
-    if (cookie) {
-      fetchData();
+    const token = Cookies.get(import.meta.env.VITE_TOKEN_KEY);
+    const role = Cookies.get(import.meta.env.VITE_USER_ROLE);
+    if (token && role) {
+      if (role === "user") {
+        navigate("/profile");
+      } else if (role === "admin") {
+        navigate("/dashboard");
+      }
+    } else {
+      Cookies.remove(import.meta.env.VITE_TOKEN_KEY, { path: "" });
+      Cookies.remove(import.meta.env.VITE_USER_ROLE, { path: "" });
     }
-  }, [navigate]);
+  }, []);
 
   return (
     <>
