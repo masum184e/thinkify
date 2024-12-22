@@ -9,6 +9,7 @@ import axios from "axios";
 import useThinkify from "../hooks/useThinkify";
 import dayjs from "dayjs";
 import { useForm, FormProvider } from "react-hook-form";
+import Cookies from 'js-cookie';
 
 const TaskManager = () => {
   const [allTask, setAllTask] = useState([]);
@@ -57,17 +58,18 @@ const TaskManager = () => {
   const onSubmit = async (data) => {
     try {
       setLoadingStatus(true);
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_ENDPOINT}/tasks`,
+        { ...data, selectedDate },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get(
+              import.meta.env.VITE_TOKEN_KEY
+            )}`,
+          },
+        }
+      );
 
-      const response = await axios({
-        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-        url: "/tasks",
-        withCredentials: true,
-        method: "POST",
-        data: {
-          ...data,
-          selectedDate,
-        },
-      });
       setAllTask((prevTasks) => [
         ...prevTasks,
         { ...data, selectedDate, taskStatus: "todo" },
