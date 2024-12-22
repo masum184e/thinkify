@@ -17,10 +17,11 @@ import useThinkify from "../hooks/useThinkify";
 
 const MyPost = () => {
   const [data, setData] = useState([]);
-  const { setAlertBoxOpenStatus, setAlertMessage, setAlertSeverity } =
+  const { setLoadingStatus, setAlertBoxOpenStatus, setAlertMessage, setAlertSeverity } =
     useThinkify();
   useEffect(() => {
     const fetchData = async () => {
+      setLoadingStatus(true);
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_SERVER_ENDPOINT}/posts`,
@@ -35,16 +36,29 @@ const MyPost = () => {
         if (response.data.status) {
           setData(response.data.posts);
         } else {
-          console.log(response.data);
+          setLoadingStatus(false);
+          setAlertBoxOpenStatus(true);
+          setAlertSeverity(response.data.status ? "success" : "error");
+          setAlertMessage(response.data.message);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+        setLoadingStatus(false);
+        setAlertBoxOpenStatus(true);
+        setAlertSeverity("error");
+        setAlertMessage("Something Went Wrong");
+        error.response.data.message
+          ? setAlertMessage(error.response.data.message)
+          : setAlertMessage(error.message);
+      } finally {
+        setLoadingStatus(false);
       }
     };
     fetchData();
   }, []);
   const handleDelete = async (postId) =>{
     try{
+      setLoadingStatus(true);
       const response = await axios.delete(`${import.meta.env.VITE_SERVER_ENDPOINT}/posts/${postId}`,{
         headers: {
           Authorization: `Bearer ${Cookies.get(
@@ -58,6 +72,7 @@ const MyPost = () => {
         setAlertSeverity("success");
         setAlertMessage(response.data.message);
       }else{
+        setLoadingStatus(false);
         console.log(response.data);
         setAlertBoxOpenStatus(true);
         setAlertSeverity("error");
@@ -65,6 +80,7 @@ const MyPost = () => {
       }
     }catch(error){
       console.log(error);
+      setLoadingStatus(false);
       setAlertBoxOpenStatus(true);
       setAlertSeverity("error");
       setAlertMessage("Something Went Wrong");
