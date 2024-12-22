@@ -30,7 +30,27 @@ const addPost = async (req, res) => {
 }
 
 const removePost = async (req, res) => {
+    try{
+    
+        const postId = req.params.postId;
+        const authorId = req.user._id.toString();
+        console.log(postId, authorId);
+        const post = await PostModel.findOne({ _id: postId, authorId });
+        if (!post) {
+            return res.status(404).json({ status: false, message: "Post not found" });
+        }
 
+        const deletedPost = await PostModel.findByIdAndDelete(postId);
+        if (deletedPost) {
+            return res.status(200).json({ status: true, message: "Post Deleted Successfully" });
+        } else {
+            return res.status(500).json({ status: false, message: "Something Went Wrong" });
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: "Internal Server Error" });
+    }
 }
 
 const editPost = async (req, res) => {

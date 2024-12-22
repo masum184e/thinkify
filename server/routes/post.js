@@ -6,7 +6,7 @@ const post = express.Router();
 
 post.post("/", userAuthentication, addPost);
 post.get("/", userAuthentication, getAllPost);
-post.delete("/:postId", removePost);
-post.patch("/:postId", editPost);
+post.delete("/:postId",userAuthentication, removePost);
+post.patch("/:postId",userAuthentication, editPost);
 
 export default post

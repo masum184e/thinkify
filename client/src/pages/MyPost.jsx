@@ -13,9 +13,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import useThinkify from "../hooks/useThinkify";
 
 const MyPost = () => {
   const [data, setData] = useState([]);
+  const { setAlertBoxOpenStatus, setAlertMessage, setAlertSeverity } =
+    useThinkify();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -40,6 +43,37 @@ const MyPost = () => {
     };
     fetchData();
   }, []);
+  const handleDelete = async (postId) =>{
+    try{
+      const response = await axios.delete(`${import.meta.env.VITE_SERVER_ENDPOINT}/posts/${postId}`,{
+        headers: {
+          Authorization: `Bearer ${Cookies.get(
+            import.meta.env.VITE_TOKEN_KEY
+          )}`,
+        },
+      });
+      if(response.data.status){
+        setData(data.filter((item)=>item._id !== postId));
+        setAlertBoxOpenStatus(true);
+        setAlertSeverity("success");
+        setAlertMessage(response.data.message);
+      }else{
+        console.log(response.data);
+        setAlertBoxOpenStatus(true);
+        setAlertSeverity("error");
+        setAlertMessage(response.data.message);
+      }
+    }catch(error){
+      console.log(error);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity("error");
+      setAlertMessage("Something Went Wrong");
+      // server error message with status code
+      error.response.data.message
+        ? setAlertMessage(error.response.data.message)
+        : setAlertMessage(error.message);
+    }
+  }
   if (data && data.length < 1) {
     return (
       <Box>
@@ -116,6 +150,7 @@ const MyPost = () => {
                         borderRadius: "5px",
                         padding: "5px",
                         fontSize: "30px",
+                        cursor: "pointer",
                       }}
                     />
                     <DeleteIcon
@@ -124,7 +159,9 @@ const MyPost = () => {
                         borderRadius: "5px",
                         padding: "5px",
                         fontSize: "30px",
+                        cursor: "pointer",
                       }}
+                      onClick={()=>handleDelete(item._id)}
                     />
                   </Box>
                 </TableCell>
