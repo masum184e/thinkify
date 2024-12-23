@@ -16,10 +16,10 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 import NavBar from "./NavBar";
 import Footer from "../../components/home/footer/Footer";
-import axios from "axios";
 import useThinkify from "../hooks/useThinkify";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
+import AlertBox from "../../components/common/AlertBox";
 
 const AdminSideBar = () => {
   const navigate = useNavigate();
@@ -73,6 +73,7 @@ const AdminSideBar = () => {
   return (
     <div>
       <NavBar />
+      <AlertBox />
       <Box sx={{ display: "flex" }}>
         <Drawer
           variant="persistent"
