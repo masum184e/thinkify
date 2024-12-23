@@ -13,6 +13,7 @@ import AddProduct from "../pages/AddProduct";
 import AdminSideBar from "../layouts/AdminSideBar";
 import NotFound from "../pages/NotFound";
 import Setting from "../pages/Setting";
+import Users from "../pages/dashboard/Users";
 
 const router = createBrowserRouter([
   {
@@ -82,6 +83,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Profile />,
+      },
+      {
+        path: "users",
+        element: <Users />,
       },
     ],
   },

@@ -147,4 +147,37 @@ const changePassword = async (req, res) => {
     }
 }
 
-export { registration, login, getUserData, changePassword }
+const getUsers = async (req, res) => {
+    try {
+
+        const users = await UserModel.find();
+        res.status(200).json({ status: true, message: "Data Fetched Successfully", users });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: "Internal Server Error" });
+    }
+}
+
+const removeUser = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const user = await UserModel.findOne({ _id: userId });
+        if (!user) {
+            return res.status(404).json({ status: false, message: "User not found" });
+        }
+
+        const removedUser = await UserModel.findByIdAndDelete(userId);
+        if (removedUser) {
+            return res.status(200).json({ status: true, message: "User Deleted Successfully" });
+        } else {
+            return res.status(500).json({ status: false, message: "Something Went Wrong" });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: "Internal Server Error" });
+    }
+
+}
+
+export { registration, login, getUserData, changePassword, getUsers, removeUser }

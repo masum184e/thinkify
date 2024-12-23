@@ -1,18 +1,7 @@
 import { Box, Grid, Avatar, Typography, Card } from '@mui/material';
 import NotesIcon from '@mui/icons-material/Notes';
 
-import { useEffect } from 'react';
-import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router-dom';
-
 const Dashboard = () => {
-    const navigate = useNavigate();
-    useEffect(() => {
-        const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY)
-        if (!cookie) {
-            navigate("/login")
-        }
-    }, [navigate])
 
     const dashboardData = [
         {
