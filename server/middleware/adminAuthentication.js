@@ -5,27 +5,32 @@ import UserModel from "../models/userSchema.js";
 
 const adminAuthentication = async (req, res, next) => {
     try {
-        const cookieKey = process.env.COOKIE_KEY;
-        const authorizationToken = req.cookies[cookieKey];
-        if (authorizationToken) {
+        const authorization = req.headers['authorization'];
+        if (authorization && authorization.startsWith("Bearer ")) {
 
-            const { userId } = jwt.verify(authorizationToken, process.env.JWT_SECRET_KEY)
-            if (Types.ObjectId.isValid(userId)) {
+            const authorizationToken = authorization.split(" ")[1];
+            if (authorizationToken) {
 
-                const user = await UserModel.findById(userId).select("-password");
-                if (user.role === "admin") {
-                    req.admin = user
-                    next();
+                const { userId } = jwt.verify(authorizationToken, process.env.JWT_SECRET_KEY)
+                if (Types.ObjectId.isValid(userId)) {
+
+                    const user = await UserModel.findById(userId).select("-password");
+                    if (user.role === "admin") {
+                        req.admin = user
+                        next();
+                    } else {
+                        return res.status(403).json({ "status": false, "message": "Invalid Request" });
+                    }
+
                 } else {
                     return res.status(403).json({ "status": false, "message": "Invalid Request" });
                 }
 
             } else {
-                return res.status(403).json({ "status": false, "message": "Invalid Request" });
+                res.status(401).json({ "status": false, "message": "Authorization Failed" });
             }
-
         } else {
-            res.status(401).json({ "status": false, "message": "Authorization Failed" });
+            throw new Error("Unauthorized User");
         }
 
     } catch (error) {
