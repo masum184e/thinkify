@@ -13,8 +13,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import useThinkify from "../hooks/useThinkify";
 import { Link } from "react-router-dom";
+
+import useThinkify from "../hooks/useThinkify";
 
 const MyPost = () => {
   const [data, setData] = useState([]);
