@@ -59,7 +59,7 @@ const RoleCount = () => {
   }, []);
 
   if (!countData.length) {
-    return <p>Loading data...</p>;
+    return <p>No Data Found</p>;
   }
 
   return (

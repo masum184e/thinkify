@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,14 +6,12 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-
 import useThinkify from "../../hooks/useThinkify";
 
 const Users = () => {
@@ -25,6 +22,7 @@ const Users = () => {
     setAlertMessage,
     setAlertSeverity,
   } = useThinkify();
+
   const handleDelete = async (userId) => {
     try {
       setLoadingStatus(true);
@@ -39,33 +37,28 @@ const Users = () => {
         }
       );
       if (response.data.status) {
-        setData(data.filter((item) => item._id !== userId));
+        setData((prevData) => prevData.filter((item) => item._id !== userId));
         setAlertBoxOpenStatus(true);
         setAlertSeverity("success");
         setAlertMessage(response.data.message);
       } else {
-        setLoadingStatus(false);
-        console.log(response.data);
-        setAlertBoxOpenStatus(true);
-        setAlertSeverity("error");
-        setAlertMessage(response.data.message);
+        throw new Error(response.data.message);
       }
     } catch (error) {
-      console.log(error);
-      setLoadingStatus(false);
       setAlertBoxOpenStatus(true);
       setAlertSeverity("error");
-      setAlertMessage("Something Went Wrong");
-      // server error message with status code
-      error.response.data.message
-        ? setAlertMessage(error.response.data.message)
-        : setAlertMessage(error.message);
+      setAlertMessage(
+        error.response?.data?.message || "Failed to delete user."
+      );
+    } finally {
+      setLoadingStatus(false);
     }
   };
+
   useEffect(() => {
     const fetchData = async () => {
-      setLoadingStatus(true);
       try {
+        setLoadingStatus(true);
         const response = await axios.get(
           `${import.meta.env.VITE_SERVER_ENDPOINT}/users`,
           {
@@ -78,29 +71,21 @@ const Users = () => {
         );
         if (response.data.status) {
           setData(response.data.users);
-          console.log(data);
         } else {
-          setLoadingStatus(false);
-          setAlertBoxOpenStatus(true);
-          setAlertSeverity(response.data.status ? "success" : "error");
-          setAlertMessage(response.data.message);
+          throw new Error(response.data.message);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoadingStatus(false);
         setAlertBoxOpenStatus(true);
         setAlertSeverity("error");
-        setAlertMessage("Something Went Wrong");
-        error.response.data.message
-          ? setAlertMessage(error.response.data.message)
-          : setAlertMessage(error.message);
+        setAlertMessage(error.message || "Failed to fetch users.");
       } finally {
         setLoadingStatus(false);
       }
     };
     fetchData();
   }, []);
-  if (data && data.length < 1) {
+
+  if (!data.length) {
     return (
       <Box>
         <Typography
@@ -114,83 +99,46 @@ const Users = () => {
       </Box>
     );
   }
+
   return (
-    <Box
-      sx={{
-        width: "100%",
-        height: "620px",
-        overflowY: "scroll",
-        "&::-webkit-scrollbar": {
-          display: "none",
-        },
-      }}
-    >
-      <TableContainer component={Paper} sx={{ width: "100%" }}>
-        <Table aria-label="simple table">
-          <TableHead sx={{ backgroundColor: "#59e3a7", position: "sticky" }}>
+    <Box sx={{ width: "100%", overflowY: "scroll" }}>
+      <TableContainer component={Paper}>
+        <Table aria-label="users table">
+          <TableHead sx={{ backgroundColor: "#59e3a7" }}>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold", color: "white" }}>
                 #
               </TableCell>
               <TableCell sx={{ fontWeight: "bold", color: "white" }}>
-                Title
+                Name
               </TableCell>
               <TableCell sx={{ fontWeight: "bold", color: "white" }}>
-                Like
+                Email
               </TableCell>
               <TableCell sx={{ fontWeight: "bold", color: "white" }}>
-                Dislike
+                Role
               </TableCell>
               <TableCell sx={{ fontWeight: "bold", color: "white" }}>
-                Comment
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "white" }}>
-                Visibility
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "white" }}>
-                Action
+                Actions
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data.map((item, index) => (
-              <TableRow
-                key={item._id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
+              <TableRow key={item._id}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
-                  <Link style={{ color: "inherit" }} to={`/posts/${item._id}`}>
-                    {item.title}
+                  <Link style={{ color: "inherit" }} to={`/users/${item._id}`}>
+                    {item.fullName}
                   </Link>
                 </TableCell>
-                <TableCell>{item.email ? item.email : "0"}</TableCell>
-                <TableCell>{item.dislikes ? item.dislikes : "0"}</TableCell>
-                <TableCell>{item.comments ? item.comments : "0"}</TableCell>
+                <TableCell>{item.email}</TableCell>
+                <TableCell>{item.role}</TableCell>
                 <TableCell>
-                  <VisibilityOffIcon />
-                </TableCell>
-                <TableCell>
-                  <Box
-                    sx={{ display: "flex", alignItems: "center", gap: "5px" }}
-                  >
-                    <EditIcon
-                      sx={{
-                        border: "1px solid lightgray",
-                        borderRadius: "5px",
-                        padding: "5px",
-                        fontSize: "30px",
-                        cursor: "pointer",
-                      }}
-                    />
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    <EditIcon sx={{ cursor: "pointer" }} />
                     <DeleteIcon
-                      sx={{
-                        border: "1px solid lightgray",
-                        borderRadius: "5px",
-                        padding: "5px",
-                        fontSize: "30px",
-                        cursor: "pointer",
-                      }}
+                      sx={{ cursor: "pointer" }}
                       onClick={() => handleDelete(item._id)}
                     />
                   </Box>
