@@ -14,6 +14,7 @@ import AdminSideBar from "../layouts/AdminSideBar";
 import NotFound from "../pages/NotFound";
 import Setting from "../pages/Setting";
 import Users from "../pages/dashboard/Users";
+import Dashboard from "../pages/dashboard/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -82,7 +83,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Profile />,
+        element: <Dashboard />,
       },
       {
         path: "users",

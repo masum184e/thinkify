@@ -10,7 +10,6 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import ReportIcon from "@mui/icons-material/Report";
 import GroupIcon from "@mui/icons-material/Group";
 import LogoutIcon from "@mui/icons-material/Logout";
 
@@ -36,12 +35,7 @@ const AdminSideBar = () => {
       label: "Users",
       url: "/dashboard/users",
       icon: <GroupIcon />,
-    },
-    {
-      label: "Reports",
-      url: "/dashboard/reports",
-      icon: <ReportIcon />,
-    },
+    }
   ];
   const handleLogOut = async () => {
     setAlertBoxOpenStatus(true);
@@ -142,7 +136,7 @@ const AdminSideBar = () => {
             </ListItem>
           </List>
         </Drawer>
-        <Box sx={{ width: "100%", margin: "10px" }}>
+        <Box sx={{ width: "100%", padding: "10px 10px 5px 0px" }}>
           <Outlet />
         </Box>
       </Box>

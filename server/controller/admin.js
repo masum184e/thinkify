@@ -73,5 +73,34 @@ const userList = async (req, res) => {
     }
 }
 
+const getLastMonthNewUsersCount = async (req, res) => {
+    try {
+        const currentDate = new Date();
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(currentDate.getMonth() - 1);
 
-export { login, getUserData, logOut, userList }
+        const userCount = await UserModel.aggregate([
+            {
+                $match: {
+                    createdAt: { $gte: oneMonthAgo, $lt: currentDate },
+                },
+            },
+            {
+                $group: {
+                    _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+                    count: { $sum: 1 },
+                },
+            },
+            {
+                $sort: { _id: 1 },
+            },
+        ]);
+        res.status(200).json({ status: true, message: "Data Fetched Successfully", userCount });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: "Internal Server Error" });
+    }
+}
+
+export { login, getUserData, logOut, userList, getLastMonthNewUsersCount }
