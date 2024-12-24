@@ -1,33 +1,35 @@
 import { useEffect, useState } from "react";
-import {
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Line,
-  LineChart,
-} from "recharts";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { Typography } from "@mui/material";
-import useThinkify from "../../src/hooks/useThinkify";
+import {
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Cell,
+  Tooltip,
+  Legend,
+} from "recharts";
 
-const LastMonthActivity = () => {
+import useThinkify from "../../src/hooks/useThinkify";
+import { Typography } from "@mui/material";
+
+const RoleCount = () => {
   const [countData, setCountData] = useState([]);
+  const COLORS = ["#0088FE", "#FFBB28", "#FF8042", "#00C49F"];
+
   const {
     setLoadingStatus,
     setAlertBoxOpenStatus,
     setAlertMessage,
     setAlertSeverity,
   } = useThinkify();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoadingStatus(true);
         const response = await axios.get(
-          `${
-            import.meta.env.VITE_SERVER_ENDPOINT
-          }/admin/users/last-month-count`,
+          `${import.meta.env.VITE_SERVER_ENDPOINT}/admin/users/role-count`,
           {
             headers: {
               Authorization: `Bearer ${Cookies.get(
@@ -37,22 +39,17 @@ const LastMonthActivity = () => {
           }
         );
         if (response.data.status) {
-          setCountData(response.data.userCount);
+          setCountData(response.data.roleCounts);
         } else {
-          setLoadingStatus(false);
           setAlertBoxOpenStatus(true);
-          setAlertSeverity(response.data.status ? "success" : "error");
+          setAlertSeverity("error");
           setAlertMessage(response.data.message);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        setLoadingStatus(false);
         setAlertBoxOpenStatus(true);
         setAlertSeverity("error");
-        setAlertMessage("Something Went Wrong");
-        error.response.data.message
-          ? setAlertMessage(error.response.data.message)
-          : setAlertMessage(error.message);
+        setAlertMessage(error.response?.data?.message || error.message);
       } finally {
         setLoadingStatus(false);
       }
@@ -71,24 +68,33 @@ const LastMonthActivity = () => {
         variant="h6"
         sx={{ m: "0", textAlign: "center", color: "inherit" }}
       >
-        Last Month User Activity
+        Distribution of Users
       </Typography>
       <ResponsiveContainer width="100%" height={200}>
-        <LineChart
-          width={600}
-          height={300}
-          data={countData}
-          margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
-        >
-          <Line type="monotone" dataKey="count" stroke="#8884d8" />
-          <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-          <XAxis dataKey="date" />
-          <YAxis />
+        <PieChart>
+          <Pie
+            data={countData}
+            dataKey="count"
+            nameKey="role"
+            cx="50%"
+            cy="50%"
+            outerRadius={80}
+            fill="#8884d8"
+            label={({ role, count }) => `${role}: ${count}`}
+          >
+            {countData.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
           <Tooltip />
-        </LineChart>
+          <Legend />
+        </PieChart>
       </ResponsiveContainer>
     </div>
   );
 };
 
-export default LastMonthActivity;
+export default RoleCount;

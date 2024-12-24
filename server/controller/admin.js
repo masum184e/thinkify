@@ -103,4 +103,29 @@ const getLastMonthNewUsersCount = async (req, res) => {
     }
 }
 
-export { login, getUserData, logOut, userList, getLastMonthNewUsersCount }
+const getRoleBasedUserCount = async (req, res) => {
+    try {
+        const roleCounts = await UserModel.aggregate([
+            {
+                $group: {
+                    _id: "$role",
+                    count: { $sum: 1 },
+                },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    role: "$_id",
+                    count: 1,
+                },
+            },
+        ]);
+
+        res.status(200).json({ status: true, message: "Data Fetched Successfully", roleCounts });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: "Internal Server Error" });
+    }
+}
+
+export { login, getUserData, logOut, userList, getLastMonthNewUsersCount, getRoleBasedUserCount }
