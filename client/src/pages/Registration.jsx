@@ -24,9 +24,11 @@ const schema = yup.object().shape({
 });
 
 const Registration = () => {
+  // alert message
   const navigate = useNavigate();
   const { setAlertBoxOpenStatus, setAlertMessage, setAlertSeverity } =
     useThinkify();
+  // form validation
   const {
     register,
     handleSubmit,
@@ -39,18 +41,31 @@ const Registration = () => {
     },
     resolver: yupResolver(schema),
   });
+  // form submit
   const onSubmit = async (data) => {
     try {
-      const response = await axios({
-        baseURL: import.meta.env.VITE_SERVER_ENDPOINT,
-        url: "/users/registration",
-        withCredentials: true,
-        method: "POST",
-        data,
-      });
-      console.log(response.data);
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_ENDPOINT}/users/registration`,
+        data
+      );
       if (response.data.status) {
-        navigate("/profile");
+        Cookies.set(import.meta.env.VITE_TOKEN_KEY, response.data.token, {
+          expires: Number(import.meta.env.VITE_COOKIE_EXPIRES),
+          path: "",
+        });
+        Cookies.set(import.meta.env.VITE_USER_ROLE, response.data.user.role, {
+          expires: Number(import.meta.env.VITE_COOKIE_EXPIRES),
+          path: "",
+        });
+        if (response.data.user.role === "user") {
+          navigate("/profile");
+        } else if (response.data.user.role === "admin") {
+          navigate("/dashboard");
+        } else {
+          setAlertBoxOpenStatus(true);
+          setAlertSeverity("error");
+          setAlertMessage("Something Went Wrong");
+        }
       } else {
         setAlertBoxOpenStatus(true);
         setAlertSeverity("error");
@@ -61,17 +76,28 @@ const Registration = () => {
       setAlertBoxOpenStatus(true);
       setAlertSeverity("error");
       setAlertMessage("Something Went Wrong");
+      // server error message with status code
       error.response.data.message
         ? setAlertMessage(error.response.data.message)
         : setAlertMessage(error.message);
     }
   };
+  // check if user is already logged in
   useEffect(() => {
-    const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY);
-    if (cookie) {
-      navigate("/profile");
+    const token = Cookies.get(import.meta.env.VITE_TOKEN_KEY);
+    const role = Cookies.get(import.meta.env.VITE_USER_ROLE);
+    if (token && role) {
+      if (role === "user") {
+        navigate("/profile");
+      } else if (role === "admin") {
+        navigate("/dashboard");
+      }
+    } else {
+      Cookies.remove(import.meta.env.VITE_TOKEN_KEY, { path: "" });
+      Cookies.remove(import.meta.env.VITE_USER_ROLE, { path: "" });
     }
-  }, [navigate]);
+  }, []);
+  
   return (
     <>
       <Box height="100vh" sx={{ display: "flex" }}>
