@@ -3,6 +3,11 @@ import {
   ThumbUp,
   Favorite,
   SentimentVeryDissatisfied,
+  Facebook,
+  Twitter,
+  LinkedIn,
+  WhatsApp,
+  Print,
 } from "@mui/icons-material";
 import {
   Card,
@@ -22,6 +27,12 @@ import NavBar from "../layouts/NavBar";
 import Footer from "../layouts/Footer";
 import Cookies from "js-cookie";
 
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  LinkedinShareButton,
+  WhatsappShareButton,
+} from "react-share";
 const reactionsList = [
   { type: "like", icon: <ThumbUp />, color: "primary" },
   { type: "love", icon: <Favorite />, color: "secondary" },
@@ -30,6 +41,7 @@ const reactionsList = [
 
 const Post = () => {
   const { postId } = useParams();
+  const shareUrl = `https://thinkify.vercel.app/posts/${postId}`;
   const {
     setLoadingStatus,
     setAlertBoxOpenStatus,
@@ -91,11 +103,14 @@ const Post = () => {
             setPost((prevPost) => {
               return {
                 ...prevPost,
-                comments: [...prevPost.comments, {
-                  comment: commentText,
-                  userId: Cookies.get(import.meta.env.VITE_USER_KEY),
-                  createdAt: new Date().toISOString(),
-                }],
+                comments: [
+                  ...prevPost.comments,
+                  {
+                    comment: commentText,
+                    userId: Cookies.get(import.meta.env.VITE_USER_KEY),
+                    createdAt: new Date().toISOString(),
+                  },
+                ],
               };
             });
             setCommentText("");
@@ -148,7 +163,6 @@ const Post = () => {
             }
           );
           if (response.data.status) {
-
             // IMPLEMENT REALTIME REACTION UPDATE
 
             setAlertBoxOpenStatus(true);
@@ -179,7 +193,6 @@ const Post = () => {
       setAlertSeverity("error");
       setAlertMessage("Reaction Required");
     }
-    
   };
 
   return (
@@ -198,6 +211,36 @@ const Post = () => {
               post.createdAt !== null &&
               ` | ${new Date(post.createdAt).toLocaleString()}`}
           </Typography>
+
+          {post && (
+            <Stack direction="row" spacing={1} sx={{ marginTop: 1 }}>
+              <FacebookShareButton url={shareUrl} quote={post.title}>
+                <Facebook sx={{ fontSize: 30, cursor: "pointer", color: "#1877F2" }} />
+              </FacebookShareButton>
+
+              <TwitterShareButton url={shareUrl} title={post.title}>
+                <Twitter sx={{ fontSize: 30, cursor: "pointer", color: "#1DA1F2" }} />
+              </TwitterShareButton>
+
+              <LinkedinShareButton
+                url={shareUrl}
+                title={post.title}
+                source={shareUrl}
+              >
+                <LinkedIn sx={{ fontSize: 30, cursor: "pointer", color: "#0077B5" }} />
+              </LinkedinShareButton>
+
+              <WhatsappShareButton
+                url={shareUrl}
+                title={post.title}
+                separator=" - "
+              >
+                <WhatsApp sx={{ fontSize: 30, cursor: "pointer", color: "#25D366" }} />
+              </WhatsappShareButton>
+
+              <Print sx={{ fontSize: 30, cursor: "pointer", color: "#333333" }} />
+            </Stack>
+          )}
 
           <Stack direction="row" spacing={1} sx={{ mb: 2, mt: 1 }}>
             {post &&
