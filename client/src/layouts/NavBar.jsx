@@ -1,6 +1,7 @@
 import { AppBar, Toolbar, Box, Typography, Button, ButtonGroup } from '@mui/material';
 import { Link } from 'react-router-dom'
 import Cookies from 'js-cookie'
+import AlertBox from '../../components/common/AlertBox';
 
 export default function NavBar() {
     const cookie = Cookies.get(import.meta.env.VITE_COOKIE_KEY)
@@ -37,6 +38,7 @@ export default function NavBar() {
                     </Box>
                 </Toolbar>
             </AppBar>
+            <AlertBox />
         </Box>
     );
 }
