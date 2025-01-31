@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { useReactToPrint } from "react-to-print";
 import {
   ThumbUp,
   Favorite,
@@ -21,7 +22,7 @@ import {
   Stack,
 } from "@mui/material";
 import useThinkify from "../hooks/useThinkify";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import NavBar from "../layouts/NavBar";
 import Footer from "../layouts/Footer";
@@ -195,10 +196,19 @@ const Post = () => {
     }
   };
 
+	const cardRef = useRef();
+
+	const handlePrint = useReactToPrint({
+		content: () => cardRef.current,
+		documentTitle: post?.title || "Post Print",
+		removeAfterPrint: true,
+    contentRef: cardRef,
+	});
+
   return (
     <>
       <NavBar />
-      <Card sx={{ maxWidth: 1280, margin: "20px auto", padding: 2 }}>
+      <Card ref={cardRef} sx={{ maxWidth: 1280, margin: "20px auto", padding: 2 }}>
         <CardContent>
           {post && (
             <Typography sx={{ color: "#1b2e35" }} variant="h5" gutterBottom>
@@ -213,7 +223,7 @@ const Post = () => {
           </Typography>
 
           {post && (
-            <Stack direction="row" spacing={1} sx={{ marginTop: 1 }}>
+            <Stack direction="row" spacing={1} sx={{ marginTop: 1 }} className="no-print" >
               <FacebookShareButton url={shareUrl} quote={post.title}>
                 <Facebook sx={{ fontSize: 30, cursor: "pointer", color: "#1877F2" }} />
               </FacebookShareButton>
@@ -238,7 +248,7 @@ const Post = () => {
                 <WhatsApp sx={{ fontSize: 30, cursor: "pointer", color: "#25D366" }} />
               </WhatsappShareButton>
 
-              <Print sx={{ fontSize: 30, cursor: "pointer", color: "#333333" }} />
+              <Print onClick={handlePrint} sx={{ fontSize: 30, cursor: "pointer", color: "#333333" }} />
             </Stack>
           )}
 
@@ -286,8 +296,9 @@ const Post = () => {
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 sx={{ mb: 2 }}
+                className="no-print"
               />
-              <Button variant="contained" onClick={handleComment}>
+              <Button variant="contained" onClick={handleComment} className="no-print" >
                 Comment
               </Button>
 
