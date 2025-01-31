@@ -7,10 +7,8 @@ const userAuthentication = async (req, res, next) => {
     try {
         const authorization = req.headers['authorization'];
         if (authorization && authorization.startsWith("Bearer ")) {
-          
             const authorizationToken = authorization.split(" ")[1];
-            if (authorizationToken) {
-
+            if (authorizationToken && authorizationToken !== "null" && authorizationToken !== "undefined") {
                 const { userId } = jwt.verify(authorizationToken, process.env.JWT_SECRET_KEY)
                 if (Types.ObjectId.isValid(userId)) {
 

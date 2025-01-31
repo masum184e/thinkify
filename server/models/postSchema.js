@@ -23,7 +23,7 @@ const postSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    reactions:[
+    reactions: [
         {
             userId: {
                 type: mongoose.Schema.Types.ObjectId,
@@ -33,6 +33,9 @@ const postSchema = new mongoose.Schema({
             reaction: {
                 type: String,
                 required: true
+            }, createdAt: {
+                type: Date,
+                default: Date.now
             }
         }
     ],

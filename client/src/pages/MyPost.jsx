@@ -127,7 +127,7 @@ const MyPost = () => {
               <TableCell sx={{ fontWeight: "bold", color: "white" }}>
                 Title
               </TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "white" }}>
+              {/* <TableCell sx={{ fontWeight: "bold", color: "white" }}>
                 Like
               </TableCell>
               <TableCell sx={{ fontWeight: "bold", color: "white" }}>
@@ -135,7 +135,7 @@ const MyPost = () => {
               </TableCell>
               <TableCell sx={{ fontWeight: "bold", color: "white" }}>
                 Comment
-              </TableCell>
+              </TableCell> */}
               <TableCell sx={{ fontWeight: "bold", color: "white" }}>
                 Visibility
               </TableCell>
@@ -152,9 +152,9 @@ const MyPost = () => {
               >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell><Link style={{color:"inherit"}} to={`/posts/${item._id}`} >{item.title}</Link></TableCell>
-                <TableCell>{item.likes ? item.likes : "0"}</TableCell>
-                <TableCell>{item.dislikes ? item.dislikes : "0"}</TableCell>
-                <TableCell>{item.comments ? item.comments : "0"}</TableCell>
+                {/* <TableCell>{item.likes ? item.likes : "0"}</TableCell> */}
+                {/* <TableCell>{item.dislikes ? item.dislikes : "0"}</TableCell> */}
+                {/* <TableCell>{item.comments ? item.comments : "0"}</TableCell> */}
                 <TableCell>
                   <VisibilityOffIcon />
                 </TableCell>
