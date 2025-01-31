@@ -127,7 +127,8 @@ const getSinglePost = async (req, res) => {
                                     ]
                                 },
                                 reaction: "$$reaction.reaction",
-                                createdAt: "$$reaction.createdAt"
+                                createdAt: "$$reaction.createdAt",
+                                reactor_id: "$$reaction.userId"
                             }
                         }
                     },
@@ -145,7 +146,8 @@ const getSinglePost = async (req, res) => {
                                     ]
                                 },
                                 comment: "$$comment.comment",
-                                createdAt: "$$comment.createdAt"
+                                createdAt: "$$comment.createdAt",
+                                commenter_id: "$$comment.userId"
                             }
                         }
                     }
@@ -234,7 +236,7 @@ const addReaction = async (req, res) => {
         post.reactions.push({ userId, reaction: reactionType });
         const updatedPost = await post.save();
         if (updatedPost) {
-            return res.status(201).json({ status: true, message: "Reaction added successfully" });
+            return res.status(201).json({ status: true, message: "Reaction updated successfully" });
         } else {
             return res.status(500).json({ status: false, message: "Something Went Wrong" });
         }

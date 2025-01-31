@@ -10,6 +10,7 @@ import {
   WhatsApp,
   Print,
 } from "@mui/icons-material";
+import { jwtDecode } from 'jwt-decode';
 import {
   Card,
   CardContent,
@@ -164,7 +165,44 @@ const Post = () => {
             }
           );
           if (response.data.status) {
-            // IMPLEMENT REALTIME REACTION UPDATE
+            setPost((prevPost) => {
+              const authorizedUser = jwtDecode(Cookies.get(import.meta.env.VITE_TOKEN_KEY)).userId;
+              const userReaction = prevPost.reactions.find(
+                (r) => r.reactor_id === authorizedUser
+              );
+              
+
+              if (!userReaction) {
+                return {
+                  ...prevPost,
+                  reactions: [
+                    ...prevPost.reactions,
+                    {
+                      reactor_id: authorizedUser,
+                      reaction: reactionType,
+                    },
+                  ],
+                };
+              } else if (userReaction.reaction === reactionType) {
+                return {
+                  ...prevPost,
+                  reactions: prevPost.reactions.filter(
+                    (r) => r.reactor_id !== authorizedUser
+                  ),
+                };
+              } else {
+                return {
+                  ...prevPost,
+                  reactions: prevPost.reactions.map((r) =>
+                    r.reactor_id === authorizedUser
+                      ? { ...r, reaction: reactionType }
+                      : r
+                  ),
+                };
+              }
+      
+            });
+
 
             setAlertBoxOpenStatus(true);
             setAlertSeverity("success");
@@ -216,7 +254,7 @@ const Post = () => {
             </Typography>
           )}
           <Typography variant="subtitle2" color="text.secondary">
-            {post && `Author: ${post.authorId.fullName}`}
+            {post && `Author: ${post.author}`}
             {post &&
               post.createdAt !== null &&
               ` | ${new Date(post.createdAt).toLocaleString()}`}
@@ -313,7 +351,7 @@ const Post = () => {
                       <Typography variant="body2" sx={{ fontWeight: "bold" }}>
                         {comment.comment}
                       </Typography>
-                      <Typography variant="body2">{comment.userId}</Typography>
+                      <Typography variant="body2">{comment.commenter}</Typography>
                       <Typography variant="caption" color="text.secondary">
                         {new Date(comment.createdAt).toLocaleString()}
                       </Typography>
