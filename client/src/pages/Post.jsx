@@ -37,8 +37,8 @@ import {
 } from "react-share";
 const reactionsList = [
   { type: "like", icon: <ThumbUp />, color: "primary" },
-  { type: "love", icon: <Favorite />, color: "secondary" },
-  { type: "angry", icon: <SentimentVeryDissatisfied />, color: "error" },
+  { type: "love", icon: <Favorite />, color: "error" },
+  { type: "angry", icon: <SentimentVeryDissatisfied />, color: "warning" },
 ];
 
 const Post = () => {
@@ -298,7 +298,7 @@ const Post = () => {
                   label={`#${tag}`}
                   color="info"
                   variant="outlined"
-                  sx={{ cursor: "pointer" }}
+                  sx={{ cursor: "pointer", borderColor: "#1b2e35",color: "#1b2e35" }}
                 />
               ))}
           </Stack>
@@ -336,7 +336,7 @@ const Post = () => {
                 sx={{ mb: 2 }}
                 className="no-print"
               />
-              <Button variant="contained" onClick={handleComment} className="no-print" >
+              <Button variant="contained" onClick={handleComment} className="no-print" sx={{backgroundColor: "#1b2e35"}} >
                 Comment
               </Button>
 
