@@ -15,6 +15,7 @@ import NotFound from "../pages/NotFound";
 import Setting from "../pages/Setting";
 import Users from "../pages/dashboard/Users";
 import Dashboard from "../pages/dashboard/Dashboard";
+import Post from "../pages/Post";
 
 const router = createBrowserRouter([
   {
@@ -76,8 +77,10 @@ const router = createBrowserRouter([
   {
     path: "/setting",
     element: <UserSideBar><Setting /></UserSideBar>,
-  },
-  {
+  },{
+    path:"/posts/:postId",
+    element: <Post />
+  }, {
     path: "/dashboard",
     element: <AdminSideBar />,
     children: [

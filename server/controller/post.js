@@ -69,4 +69,24 @@ const getAllPost = async (req, res) => {
     }
 }
 
-export { addPost, removePost, editPost, getAllPost };
+const getSinglePost = async (req, res) => {
+    try{
+        const { postId } = req.params;
+
+        const post = await PostModel.findById(postId)
+        .populate("authorId", "fullName")
+        .populate("comments.userId", "fullName")
+        .populate("reactions.userId", "fullName")
+
+        if (!post) {
+            return res.status(404).json({ status: false, message: "Post not found" });
+        }
+        res.status(200).json({ status: true, message: "Data Fetched Successfully", post });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: "Internal Server Error" });
+    }
+}
+
+export { addPost, removePost, editPost, getAllPost, getSinglePost };
