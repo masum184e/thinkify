@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
-import Footer from "../../components/home/footer/Footer";
 import NavBar from "../layouts/NavBar";
+import Footer from "../layouts/Footer";
 
 const NotFound = () => {
   return (

@@ -14,11 +14,11 @@ import GroupIcon from "@mui/icons-material/Group";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 import NavBar from "./NavBar";
-import Footer from "../../components/home/footer/Footer";
 import useThinkify from "../hooks/useThinkify";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
 import AlertBox from "../../components/common/AlertBox";
+import Footer from "./Footer";
 
 const AdminSideBar = () => {
   const navigate = useNavigate();

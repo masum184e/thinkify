@@ -19,7 +19,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 import NavBar from "./NavBar";
-import Footer from "../../components/home/footer/Footer";
+import Footer from "./Footer";
 import Cookies from "js-cookie";
 import useThinkify from "../hooks/useThinkify";
 import AlertBox from "../../components/common/AlertBox";
