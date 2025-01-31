@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import PostModel from "../models/postSchema.js";
 
 const addPost = async (req, res) => {
@@ -73,17 +74,89 @@ const getSinglePost = async (req, res) => {
     try {
         const { postId } = req.params;
 
-        const post = await PostModel.findById(postId)
-            .populate("authorId", "fullName")
-        // .populate("comments.userId", "fullName")
-        // .populate("reactions.userId", "fullName")
+        const post = await PostModel.aggregate([
+            {
+                $match: { _id: new mongoose.Types.ObjectId(postId) }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'authorId',
+                    foreignField: '_id',
+                    as: 'author'
+                }
+            },
+            {
+                $unwind: "$author"
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'reactions.userId',
+                    foreignField: '_id',
+                    as: 'reactors'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'comments.userId',
+                    foreignField: '_id',
+                    as: 'commenters'
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    title: 1,
+                    tags: 1,
+                    description: 1,
+                    createdAt: 1,
+                    "author": "$author.fullName",
+                    reactions: {
+                        $map: {
+                            input: "$reactions",
+                            as: "reaction",
+                            in: {
+                                reactor: {
+                                    $arrayElemAt: [
+                                        "$reactors.fullName",
+                                        {
+                                            $indexOfArray: ["$reactors._id", "$$reaction.userId"]
+                                        }
+                                    ]
+                                },
+                                reaction: "$$reaction.reaction",
+                                createdAt: "$$reaction.createdAt"
+                            }
+                        }
+                    },
+                    comments: {
+                        $map: {
+                            input: "$comments",
+                            as: "comment",
+                            in: {
+                                commenter: {
+                                    $arrayElemAt: [
+                                        "$commenters.fullName",
+                                        {
+                                            $indexOfArray: ["$commenters._id", "$$comment.userId"]
+                                        }
+                                    ]
+                                },
+                                comment: "$$comment.comment",
+                                createdAt: "$$comment.createdAt"
+                            }
+                        }
+                    }
+                }
+            }
+        ]);
 
-        // console.log(post);
-
-        if (!post) {
+        if (!post || post.length === 0) {
             return res.status(404).json({ status: false, message: "Post not found" });
         }
-        return res.status(200).json({ status: true, message: "Data Fetched Successfully", post });
+        return res.status(200).json({ status: true, message: "Data Fetched Successfully", post:post[0] });
 
     } catch (error) {
         console.error(error);
