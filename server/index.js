@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 
 import databaseConnection from './config/databaseConnection.js';
 import router from './routes/route.js';
@@ -25,6 +26,7 @@ app.use(
 databaseConnection(DATABASE_URL, DATABASE_NAME);
 app.use(express.json());
 app.use(cookieParser());
+app.use('/api', express.static("uploads"));
 app.use("/api", router);
 app.get("/", (req, res) => {
     res.send("Server Running Successfully");

@@ -158,7 +158,7 @@ const getSinglePost = async (req, res) => {
         if (!post || post.length === 0) {
             return res.status(404).json({ status: false, message: "Post not found" });
         }
-        return res.status(200).json({ status: true, message: "Data Fetched Successfully", post:post[0] });
+        return res.status(200).json({ status: true, message: "Data Fetched Successfully", post: post[0] });
 
     } catch (error) {
         console.error(error);

@@ -1,9 +1,10 @@
+import mongoose from "mongoose";
 import path from 'path';
 import fs from 'fs';
 import ProductModel from "../models/productSchema.js";
 
 const removeUploadedFile = (filename) => {
-    const filePath = path.join( `${process.env.UPLOAD_DIRECTORY}/productimage`, filename);
+    const filePath = path.join(`${process.env.UPLOAD_DIRECTORY}/productimage`, filename);
     fs.unlink(filePath, (err) => {
         if (err) {
             console.error(err);
@@ -90,4 +91,46 @@ const getAllProduct = async (req, res) => {
     }
 }
 
-export { addProduct, removeProduct, editProduct, getAllProduct };
+const getSingleProduct = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const product = await ProductModel.aggregate([
+            {
+                $match: { _id: new mongoose.Types.ObjectId(productId) }
+            }, {
+                $lookup: {
+                    from: 'users',
+                    localField: 'authorId',
+                    foreignField: '_id',
+                    as: 'author'
+                }
+            },
+            {
+                $unwind: "$author"
+            }, {
+                $project: {
+                    _id: 1,
+                    title: 1,
+                    image: 1,
+                    price: 1,
+                    description: 1,
+                    authorName: "$author.fullName",
+                    authorEmail: "$author.email",
+                    createdAt: 1,
+                    __v: 1
+                }
+            }
+        ])
+        console.log(product)
+
+        if (!product) {
+            return res.status(404).json({ status: false, message: "Product not found" });
+        }
+        return res.status(200).json({ status: true, message: "Data Fetched Successfully", product: product[0] });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: "Internal Server Error" });
+    }
+}
+
+export { addProduct, removeProduct, editProduct, getAllProduct, getSingleProduct };

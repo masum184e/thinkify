@@ -24,6 +24,7 @@ import Cookies from "js-cookie";
 import useThinkify from "../hooks/useThinkify";
 import AlertBox from "../../components/common/AlertBox";
 import { useEffect } from "react";
+import { StoreMallDirectoryOutlined } from "@mui/icons-material";
 
 const UserSideBar = ({ children }) => {
   const navigate = useNavigate();
@@ -51,6 +52,11 @@ const UserSideBar = ({ children }) => {
       label: "Add Product",
       url: "/add-product",
       icon: <AddShoppingCartIcon />,
+    },
+    {
+      label: "My Product",
+      url: "/my-product",
+      icon: <StoreMallDirectoryOutlined />,
     },
     {
       label: "Task Manager",

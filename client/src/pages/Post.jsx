@@ -25,8 +25,6 @@ import {
 import useThinkify from "../hooks/useThinkify";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import NavBar from "../layouts/NavBar";
-import Footer from "../layouts/Footer";
 import Cookies from "js-cookie";
 
 import {
@@ -251,14 +249,18 @@ const Post = () => {
 
   return (
     <>
-      <NavBar />
       <Card
         ref={cardRef}
         sx={{ maxWidth: 1280, margin: "20px auto", padding: 2 }}
       >
         <CardContent>
           {post && (
-            <Typography sx={{ color: "#1b2e35" }} variant="h3" fontWeight={"bold"} gutterBottom>
+            <Typography
+              sx={{ color: "#1b2e35" }}
+              variant="h3"
+              fontWeight={"bold"}
+              gutterBottom
+            >
               {post.title}
             </Typography>
           )}
@@ -403,7 +405,6 @@ const Post = () => {
           )}
         </CardContent>
       </Card>
-      <Footer />
     </>
   );
 };

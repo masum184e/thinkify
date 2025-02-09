@@ -16,6 +16,9 @@ import Setting from "../pages/Setting";
 import Users from "../pages/dashboard/Users";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Post from "../pages/Post";
+import MyProduct from "../pages/MyProduct";
+import PublicRoute from "../layouts/PublicRoute";
+import Product from "../pages/Product";
 
 const router = createBrowserRouter([
   {
@@ -75,12 +78,38 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/my-product",
+    element: (
+      <UserSideBar>
+        <MyProduct />
+      </UserSideBar>
+    ),
+  },
+  {
     path: "/setting",
-    element: <UserSideBar><Setting /></UserSideBar>,
-  },{
-    path:"/posts/:postId",
-    element: <Post />
-  }, {
+    element: (
+      <UserSideBar>
+        <Setting />
+      </UserSideBar>
+    ),
+  },
+  {
+    path: "/posts/:postId",
+    element: (
+      <PublicRoute>
+        <Post />
+      </PublicRoute>
+    ),
+  },
+  {
+    path: "/products/:productId",
+    element: (
+      <PublicRoute>
+        <Product />
+      </PublicRoute>
+    ),
+  },
+  {
     path: "/dashboard",
     element: <AdminSideBar />,
     children: [
