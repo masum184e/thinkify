@@ -10,7 +10,7 @@ import {
   WhatsApp,
   Print,
 } from "@mui/icons-material";
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 import {
   Card,
   CardContent,
@@ -35,6 +35,9 @@ import {
   LinkedinShareButton,
   WhatsappShareButton,
 } from "react-share";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
+
 const reactionsList = [
   { type: "like", icon: <ThumbUp />, color: "primary" },
   { type: "love", icon: <Favorite />, color: "error" },
@@ -52,6 +55,10 @@ const Post = () => {
   } = useThinkify();
   const [post, setPost] = useState(null);
   const [commentText, setCommentText] = useState("");
+  const renderMarkdown = (description) => {
+    const html = marked(description);
+    return { __html: DOMPurify.sanitize(html) };
+  };
   useEffect(() => {
     const fetchData = async () => {
       setLoadingStatus(true);
@@ -166,11 +173,12 @@ const Post = () => {
           );
           if (response.data.status) {
             setPost((prevPost) => {
-              const authorizedUser = jwtDecode(Cookies.get(import.meta.env.VITE_TOKEN_KEY)).userId;
+              const authorizedUser = jwtDecode(
+                Cookies.get(import.meta.env.VITE_TOKEN_KEY)
+              ).userId;
               const userReaction = prevPost.reactions.find(
                 (r) => r.reactor_id === authorizedUser
               );
-              
 
               if (!userReaction) {
                 return {
@@ -200,9 +208,7 @@ const Post = () => {
                   ),
                 };
               }
-      
             });
-
 
             setAlertBoxOpenStatus(true);
             setAlertSeverity("success");
@@ -234,22 +240,25 @@ const Post = () => {
     }
   };
 
-	const cardRef = useRef();
+  const cardRef = useRef();
 
-	const handlePrint = useReactToPrint({
-		content: () => cardRef.current,
-		documentTitle: post?.title || "Post Print",
-		removeAfterPrint: true,
+  const handlePrint = useReactToPrint({
+    content: () => cardRef.current,
+    documentTitle: post?.title || "Post Print",
+    removeAfterPrint: true,
     contentRef: cardRef,
-	});
+  });
 
   return (
     <>
       <NavBar />
-      <Card ref={cardRef} sx={{ maxWidth: 1280, margin: "20px auto", padding: 2 }}>
+      <Card
+        ref={cardRef}
+        sx={{ maxWidth: 1280, margin: "20px auto", padding: 2 }}
+      >
         <CardContent>
           {post && (
-            <Typography sx={{ color: "#1b2e35" }} variant="h5" gutterBottom>
+            <Typography sx={{ color: "#1b2e35" }} variant="h3" fontWeight={"bold"} gutterBottom>
               {post.title}
             </Typography>
           )}
@@ -261,13 +270,22 @@ const Post = () => {
           </Typography>
 
           {post && (
-            <Stack direction="row" spacing={1} sx={{ marginTop: 1 }} className="no-print" >
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{ marginTop: 1 }}
+              className="no-print"
+            >
               <FacebookShareButton url={shareUrl} quote={post.title}>
-                <Facebook sx={{ fontSize: 30, cursor: "pointer", color: "#1877F2" }} />
+                <Facebook
+                  sx={{ fontSize: 30, cursor: "pointer", color: "#1877F2" }}
+                />
               </FacebookShareButton>
 
               <TwitterShareButton url={shareUrl} title={post.title}>
-                <Twitter sx={{ fontSize: 30, cursor: "pointer", color: "#1DA1F2" }} />
+                <Twitter
+                  sx={{ fontSize: 30, cursor: "pointer", color: "#1DA1F2" }}
+                />
               </TwitterShareButton>
 
               <LinkedinShareButton
@@ -275,7 +293,9 @@ const Post = () => {
                 title={post.title}
                 source={shareUrl}
               >
-                <LinkedIn sx={{ fontSize: 30, cursor: "pointer", color: "#0077B5" }} />
+                <LinkedIn
+                  sx={{ fontSize: 30, cursor: "pointer", color: "#0077B5" }}
+                />
               </LinkedinShareButton>
 
               <WhatsappShareButton
@@ -283,10 +303,15 @@ const Post = () => {
                 title={post.title}
                 separator=" - "
               >
-                <WhatsApp sx={{ fontSize: 30, cursor: "pointer", color: "#25D366" }} />
+                <WhatsApp
+                  sx={{ fontSize: 30, cursor: "pointer", color: "#25D366" }}
+                />
               </WhatsappShareButton>
 
-              <Print onClick={handlePrint} sx={{ fontSize: 30, cursor: "pointer", color: "#333333" }} />
+              <Print
+                onClick={handlePrint}
+                sx={{ fontSize: 30, cursor: "pointer", color: "#333333" }}
+              />
             </Stack>
           )}
 
@@ -298,14 +323,23 @@ const Post = () => {
                   label={`#${tag}`}
                   color="info"
                   variant="outlined"
-                  sx={{ cursor: "pointer", borderColor: "#1b2e35",color: "#1b2e35" }}
+                  sx={{
+                    cursor: "pointer",
+                    borderColor: "#1b2e35",
+                    color: "#1b2e35",
+                  }}
                 />
               ))}
           </Stack>
 
-          <Typography variant="body1" paragraph my={4}>
-            {post && post.description}
-          </Typography>
+          {post && (
+            <Typography
+              variant="body1"
+              paragraph
+              my={4}
+              dangerouslySetInnerHTML={renderMarkdown(post.description)}
+            />
+          )}
 
           <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
             {post &&
@@ -336,7 +370,12 @@ const Post = () => {
                 sx={{ mb: 2 }}
                 className="no-print"
               />
-              <Button variant="contained" onClick={handleComment} className="no-print" sx={{backgroundColor: "#1b2e35"}} >
+              <Button
+                variant="contained"
+                onClick={handleComment}
+                className="no-print"
+                sx={{ backgroundColor: "#1b2e35" }}
+              >
                 Comment
               </Button>
 
@@ -351,7 +390,9 @@ const Post = () => {
                       <Typography variant="body2" sx={{ fontWeight: "bold" }}>
                         {comment.comment}
                       </Typography>
-                      <Typography variant="body2">{comment.commenter}</Typography>
+                      <Typography variant="body2">
+                        {comment.commenter}
+                      </Typography>
                       <Typography variant="caption" color="text.secondary">
                         {new Date(comment.createdAt).toLocaleString()}
                       </Typography>
