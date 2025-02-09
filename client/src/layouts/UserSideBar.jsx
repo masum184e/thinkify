@@ -24,7 +24,7 @@ import Cookies from "js-cookie";
 import useThinkify from "../hooks/useThinkify";
 import AlertBox from "../../components/common/AlertBox";
 import { useEffect } from "react";
-import { StoreMallDirectoryOutlined } from "@mui/icons-material";
+import SellIcon from '@mui/icons-material/Sell';
 
 const UserSideBar = ({ children }) => {
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const UserSideBar = ({ children }) => {
     {
       label: "My Product",
       url: "/my-product",
-      icon: <StoreMallDirectoryOutlined />,
+      icon: <SellIcon />,
     },
     {
       label: "Task Manager",
@@ -79,7 +79,6 @@ const UserSideBar = ({ children }) => {
     navigate("/login");
   };
 
-  // check if user is already logged in
   useEffect(() => {
     const token = Cookies.get(import.meta.env.VITE_TOKEN_KEY);
     const role = Cookies.get(import.meta.env.VITE_USER_ROLE);
