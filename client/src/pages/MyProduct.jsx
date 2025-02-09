@@ -4,6 +4,7 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  IconButton,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -11,6 +12,7 @@ import useThinkify from "../hooks/useThinkify";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
+import { Delete, Edit } from "@mui/icons-material";
 
 const MyProduct = () => {
   const [data, setData] = useState([]);
@@ -66,6 +68,47 @@ const MyProduct = () => {
     );
   }
 
+  const handleRemove = async (productId) => {
+    try {
+      setLoadingStatus(true);
+      const response = await axios.delete(
+        `${import.meta.env.VITE_SERVER_ENDPOINT}/products/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get(
+              import.meta.env.VITE_TOKEN_KEY
+            )}`,
+          },
+        }
+      );
+      if (response.data.status) {
+        setData(data.filter((item) => item._id !== productId));
+        setAlertBoxOpenStatus(true);
+        setAlertSeverity("success");
+        setAlertMessage(response.data.message);
+      } else {
+        setLoadingStatus(false);
+        console.log(response.data);
+        setAlertBoxOpenStatus(true);
+        setAlertSeverity("error");
+        setAlertMessage(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity("error");
+      setAlertMessage("Something Went Wrong");
+      error.response.data.message
+        ? setAlertMessage(error.response.data.message)
+        : setAlertMessage(error.message);
+    }
+  };
+
+  const handleEdit = (productId) => {
+    console.log(`Edit button clicked for ${productId}`);
+  };
+
   return (
     <Box
       sx={{
@@ -79,11 +122,13 @@ const MyProduct = () => {
       <Grid container spacing={3} paddingBottom={5}>
         {data.map((product) => (
           <Grid item key={product._id} xs={12} sm={6} md={4}>
-            <Link
-              to={`/products/${product._id}`}
-              style={{ textDecoration: "none" }}
-            >
-              <Card>
+            <Card>
+              <Box
+                sx={{
+                  position: "relative",
+                  cursor: "pointer",
+                }}
+              >
                 <CardMedia
                   component="img"
                   height="140"
@@ -92,6 +137,43 @@ const MyProduct = () => {
                   }/productimage/${product.image}`}
                   alt={product.title}
                 />
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: 10,
+                    right: 10,
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    flexDirection: "row",
+                  }}
+                >
+                  <IconButton
+                    sx={{
+                      color: "green",
+                      backgroundColor: "white",
+                      marginRight: "5px",
+                      "&:hover": { backgroundColor: "white" },
+                    }}
+                    onClick={() => handleEdit(product._id)}
+                  >
+                    <Edit />
+                  </IconButton>
+                  <IconButton
+                    sx={{
+                      color: "red",
+                      backgroundColor: "white",
+                      "&:hover": { backgroundColor: "white" },
+                    }}
+                    onClick={() => handleRemove(product._id)}
+                  >
+                    <Delete />
+                  </IconButton>
+                </Box>
+              </Box>
+              <Link
+                to={`/products/${product._id}`}
+                style={{ textDecoration: "none" }}
+              >
                 <CardContent
                   sx={{
                     paddingBottom: "12px !important",
@@ -114,8 +196,8 @@ const MyProduct = () => {
                     </Typography>
                   </Box>
                 </CardContent>
-              </Card>
-            </Link>
+              </Link>
+            </Card>
           </Grid>
         ))}
       </Grid>
