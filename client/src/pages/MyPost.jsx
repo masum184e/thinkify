@@ -19,8 +19,12 @@ import useThinkify from "../hooks/useThinkify";
 
 const MyPost = () => {
   const [data, setData] = useState([]);
-  const { setLoadingStatus, setAlertBoxOpenStatus, setAlertMessage, setAlertSeverity } =
-    useThinkify();
+  const {
+    setLoadingStatus,
+    setAlertBoxOpenStatus,
+    setAlertMessage,
+    setAlertSeverity,
+  } = useThinkify();
   useEffect(() => {
     const fetchData = async () => {
       setLoadingStatus(true);
@@ -58,29 +62,41 @@ const MyPost = () => {
     };
     fetchData();
   }, []);
-  const handleDelete = async (postId) =>{
-    try{
+  if (data.length === 0) {
+    return (
+      <Box textAlign="center" mt={5}>
+        <Typography variant="h4" color="#1b2e35">
+          No Post Available
+        </Typography>
+      </Box>
+    );
+  }
+  const handleDelete = async (postId) => {
+    try {
       setLoadingStatus(true);
-      const response = await axios.delete(`${import.meta.env.VITE_SERVER_ENDPOINT}/posts/${postId}`,{
-        headers: {
-          Authorization: `Bearer ${Cookies.get(
-            import.meta.env.VITE_TOKEN_KEY
-          )}`,
-        },
-      });
-      if(response.data.status){
-        setData(data.filter((item)=>item._id !== postId));
+      const response = await axios.delete(
+        `${import.meta.env.VITE_SERVER_ENDPOINT}/posts/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get(
+              import.meta.env.VITE_TOKEN_KEY
+            )}`,
+          },
+        }
+      );
+      if (response.data.status) {
+        setData(data.filter((item) => item._id !== postId));
         setAlertBoxOpenStatus(true);
         setAlertSeverity("success");
         setAlertMessage(response.data.message);
-      }else{
+      } else {
         setLoadingStatus(false);
         console.log(response.data);
         setAlertBoxOpenStatus(true);
         setAlertSeverity("error");
         setAlertMessage(response.data.message);
       }
-    }catch(error){
+    } catch (error) {
       console.log(error);
       setLoadingStatus(false);
       setAlertBoxOpenStatus(true);
@@ -91,21 +107,7 @@ const MyPost = () => {
         ? setAlertMessage(error.response.data.message)
         : setAlertMessage(error.message);
     }
-  }
-  if (data && data.length < 1) {
-    return (
-      <Box>
-        <Typography
-          variant="h1"
-          textAlign="center"
-          color="#1b2e35"
-          component="h1"
-        >
-          No Post Available
-        </Typography>
-      </Box>
-    );
-  }
+  };
   return (
     <Box
       sx={{
@@ -151,7 +153,11 @@ const MyPost = () => {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell>{index + 1}</TableCell>
-                <TableCell><Link style={{color:"inherit"}} to={`/posts/${item._id}`} >{item.title}</Link></TableCell>
+                <TableCell>
+                  <Link style={{ color: "inherit" }} to={`/posts/${item._id}`}>
+                    {item.title}
+                  </Link>
+                </TableCell>
                 {/* <TableCell>{item.likes ? item.likes : "0"}</TableCell> */}
                 {/* <TableCell>{item.dislikes ? item.dislikes : "0"}</TableCell> */}
                 {/* <TableCell>{item.comments ? item.comments : "0"}</TableCell> */}
@@ -179,7 +185,7 @@ const MyPost = () => {
                         fontSize: "30px",
                         cursor: "pointer",
                       }}
-                      onClick={()=>handleDelete(item._id)}
+                      onClick={() => handleDelete(item._id)}
                     />
                   </Box>
                 </TableCell>

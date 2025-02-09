@@ -121,7 +121,6 @@ const getSingleProduct = async (req, res) => {
                 }
             }
         ])
-        console.log(product)
 
         if (!product) {
             return res.status(404).json({ status: false, message: "Product not found" });
