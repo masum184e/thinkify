@@ -150,7 +150,20 @@ const changePassword = async (req, res) => {
 const getUsers = async (req, res) => {
     try {
 
-        const users = await UserModel.find();
+        const { query } = req.query;
+        let users = null;
+
+        if (query) {
+            users = await UserModel.find({
+                $or: [
+                    { fullName: { $regex: query, $options: "i" } },
+                    { email: { $regex: query, $options: "i" } }
+                ]
+            });
+        } else {
+            users = await UserModel.find();
+        }
+
         res.status(200).json({ status: true, message: "Data Fetched Successfully", users });
 
     } catch (error) {

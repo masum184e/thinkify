@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,6 +16,7 @@ import useThinkify from "../../hooks/useThinkify";
 
 const Users = () => {
   const [data, setData] = useState([]);
+  const [search, setSearch] = useState("");
   const {
     setLoadingStatus,
     setAlertBoxOpenStatus,
@@ -67,6 +68,7 @@ const Users = () => {
                 import.meta.env.VITE_TOKEN_KEY
               )}`,
             },
+            params: { query: search.trim() },
           }
         );
         if (response.data.status) {
@@ -83,72 +85,108 @@ const Users = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [search]);
 
   if (!data.length) {
     return (
-      <Box>
-        <Typography
-          variant="h1"
-          textAlign="center"
-          color="#1b2e35"
-          component="h1"
-        >
-          No User Available
-        </Typography>
-      </Box>
+      <>
+        <Box sx={{ width: "97%", margin: 2 }}>
+          <TextField
+            fullWidth
+            label="Search Users"
+            variant="outlined"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </Box>
+        <Box>
+          <Typography
+            variant="h1"
+            textAlign="center"
+            color="#1b2e35"
+            component="h1"
+          >
+            No User Available
+          </Typography>
+        </Box>
+      </>
     );
   }
 
   return (
-    <Box sx={{ width: "100%", overflowY: "scroll" }}>
-      <TableContainer component={Paper}>
-        <Table aria-label="users table">
-          <TableHead sx={{ backgroundColor: "#59e3a7" }}>
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold", color: "white" }}>
-                #
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "white" }}>
-                Name
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "white" }}>
-                Email
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "white" }}>
-                Role
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "white" }}>
-                Actions
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((item, index) => (
-              <TableRow key={item._id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>
-                  <Link style={{ color: "inherit" }} to={`/users/${item._id}`}>
-                    {item.fullName}
-                  </Link>
+    <>
+      <Box sx={{ width: "97%", margin: 2 }}>
+        <TextField
+          fullWidth
+          label="Search Users"
+          variant="outlined"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </Box>
+
+      <Box
+        sx={{
+          height: "88vh",
+          overflowY: "scroll",
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+          marginLeft: 2,
+          marginRight: 2,
+        }}
+      >
+        <TableContainer component={Paper}>
+          <Table aria-label="users table">
+            <TableHead sx={{ backgroundColor: "#59e3a7" }}>
+              <TableRow>
+                <TableCell sx={{ fontWeight: "bold", color: "white" }}>
+                  #
                 </TableCell>
-                <TableCell>{item.email}</TableCell>
-                <TableCell>{item.role}</TableCell>
-                <TableCell>
-                  <Box sx={{ display: "flex", gap: 1 }}>
-                    <EditIcon sx={{ cursor: "pointer" }} />
-                    <DeleteIcon
-                      sx={{ cursor: "pointer" }}
-                      onClick={() => handleDelete(item._id)}
-                    />
-                  </Box>
+                <TableCell sx={{ fontWeight: "bold", color: "white" }}>
+                  Name
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", color: "white" }}>
+                  Email
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", color: "white" }}>
+                  Role
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", color: "white" }}>
+                  Actions
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+            </TableHead>
+            <TableBody>
+              {data.map((item, index) => (
+                <TableRow key={item._id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>
+                    <Link
+                      style={{ color: "inherit" }}
+                      to={`/users/${item._id}`}
+                    >
+                      {item.fullName}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{item.email}</TableCell>
+                  <TableCell>{item.role}</TableCell>
+                  <TableCell>
+                    <Box sx={{ display: "flex", gap: 1 }}>
+                      <EditIcon sx={{ cursor: "pointer" }} />
+                      <DeleteIcon
+                        sx={{ cursor: "pointer" }}
+                        onClick={() => handleDelete(item._id)}
+                      />
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    </>
   );
 };
 
