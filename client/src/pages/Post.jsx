@@ -253,157 +253,167 @@ const Post = () => {
         ref={cardRef}
         sx={{ maxWidth: 1280, margin: "20px auto", padding: 2 }}
       >
-        <CardContent>
-          {post && (
-            <Typography
-              sx={{ color: "#1b2e35" }}
-              variant="h3"
-              fontWeight={"bold"}
-              gutterBottom
-            >
-              {post.title}
-            </Typography>
-          )}
-          <Typography variant="subtitle2" color="text.secondary">
-            {post && `Author: ${post.author}`}
-            {post &&
-              post.createdAt !== null &&
-              ` | ${new Date(post.createdAt).toLocaleString()}`}
-          </Typography>
+    {
+      post?
+      <CardContent>
+      {post && (
+        <Typography
+          sx={{ color: "#1b2e35" }}
+          variant="h3"
+          fontWeight={"bold"}
+          gutterBottom
+        >
+          {post.title}
+        </Typography>
+      )}
+      <Typography variant="subtitle2" color="text.secondary">
+        {post && `Author: ${post.author}`}
+        {post &&
+          post.createdAt !== null &&
+          ` | ${new Date(post.createdAt).toLocaleString()}`}
+      </Typography>
 
-          {post && (
-            <Stack
-              direction="row"
-              spacing={1}
-              sx={{ marginTop: 1 }}
-              className="no-print"
-            >
-              <FacebookShareButton url={shareUrl} quote={post.title}>
-                <Facebook
-                  sx={{ fontSize: 30, cursor: "pointer", color: "#1877F2" }}
-                />
-              </FacebookShareButton>
-
-              <TwitterShareButton url={shareUrl} title={post.title}>
-                <Twitter
-                  sx={{ fontSize: 30, cursor: "pointer", color: "#1DA1F2" }}
-                />
-              </TwitterShareButton>
-
-              <LinkedinShareButton
-                url={shareUrl}
-                title={post.title}
-                source={shareUrl}
-              >
-                <LinkedIn
-                  sx={{ fontSize: 30, cursor: "pointer", color: "#0077B5" }}
-                />
-              </LinkedinShareButton>
-
-              <WhatsappShareButton
-                url={shareUrl}
-                title={post.title}
-                separator=" - "
-              >
-                <WhatsApp
-                  sx={{ fontSize: 30, cursor: "pointer", color: "#25D366" }}
-                />
-              </WhatsappShareButton>
-
-              <Print
-                onClick={handlePrint}
-                sx={{ fontSize: 30, cursor: "pointer", color: "#333333" }}
-              />
-            </Stack>
-          )}
-
-          <Stack direction="row" spacing={1} sx={{ mb: 2, mt: 1 }}>
-            {post &&
-              post.tags.map((tag, index) => (
-                <Chip
-                  key={index}
-                  label={`#${tag}`}
-                  color="info"
-                  variant="outlined"
-                  sx={{
-                    cursor: "pointer",
-                    borderColor: "#1b2e35",
-                    color: "#1b2e35",
-                  }}
-                />
-              ))}
-          </Stack>
-
-          {post && (
-            <Typography
-              variant="body1"
-              paragraph
-              my={4}
-              dangerouslySetInnerHTML={renderMarkdown(post.description)}
+      {post && (
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ marginTop: 1 }}
+          className="no-print"
+        >
+          <FacebookShareButton url={shareUrl} quote={post.title}>
+            <Facebook
+              sx={{ fontSize: 30, cursor: "pointer", color: "#1877F2" }}
             />
-          )}
+          </FacebookShareButton>
 
-          <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-            {post &&
-              reactionsList.map((reaction) => (
-                <Button
-                  key={reaction.type}
-                  variant="contained"
-                  color={reaction.color}
-                  startIcon={reaction.icon}
-                  onClick={() => handleReact(reaction.type)}
-                >
-                  {
-                    post.reactions.filter((r) => r.reaction === reaction.type)
-                      .length
-                  }
-                </Button>
-              ))}
-          </Stack>
+          <TwitterShareButton url={shareUrl} title={post.title}>
+            <Twitter
+              sx={{ fontSize: 30, cursor: "pointer", color: "#1DA1F2" }}
+            />
+          </TwitterShareButton>
 
-          {post && (
-            <Box sx={{ mt: 3 }}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                placeholder="Add a comment..."
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                sx={{ mb: 2 }}
-                className="no-print"
-              />
-              <Button
-                variant="contained"
-                onClick={handleComment}
-                className="no-print"
-                sx={{ backgroundColor: "#1b2e35" }}
+          <LinkedinShareButton
+            url={shareUrl}
+            title={post.title}
+            source={shareUrl}
+          >
+            <LinkedIn
+              sx={{ fontSize: 30, cursor: "pointer", color: "#0077B5" }}
+            />
+          </LinkedinShareButton>
+
+          <WhatsappShareButton
+            url={shareUrl}
+            title={post.title}
+            separator=" - "
+          >
+            <WhatsApp
+              sx={{ fontSize: 30, cursor: "pointer", color: "#25D366" }}
+            />
+          </WhatsappShareButton>
+
+          <Print
+            onClick={handlePrint}
+            sx={{ fontSize: 30, cursor: "pointer", color: "#333333" }}
+          />
+        </Stack>
+      )}
+
+      <Stack direction="row" spacing={1} sx={{ mb: 2, mt: 1 }}>
+        {post &&
+          post.tags.map((tag, index) => (
+            <Chip
+              key={index}
+              label={`#${tag}`}
+              color="info"
+              variant="outlined"
+              sx={{
+                cursor: "pointer",
+                borderColor: "#1b2e35",
+                color: "#1b2e35",
+              }}
+            />
+          ))}
+      </Stack>
+
+      {post && (
+        <Typography
+          variant="body1"
+          paragraph
+          my={4}
+          dangerouslySetInnerHTML={renderMarkdown(post.description)}
+        />
+      )}
+
+      <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+        {post &&
+          reactionsList.map((reaction) => (
+            <Button
+              key={reaction.type}
+              variant="contained"
+              color={reaction.color}
+              startIcon={reaction.icon}
+              onClick={() => handleReact(reaction.type)}
+            >
+              {
+                post.reactions.filter((r) => r.reaction === reaction.type)
+                  .length
+              }
+            </Button>
+          ))}
+      </Stack>
+
+      {post && (
+        <Box sx={{ mt: 3 }}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Add a comment..."
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            sx={{ mb: 2 }}
+            className="no-print"
+          />
+          <Button
+            variant="contained"
+            onClick={handleComment}
+            className="no-print"
+            sx={{ backgroundColor: "#1b2e35" }}
+          >
+            Comment
+          </Button>
+
+          {post.comments.length > 0 &&
+            post.comments.map((comment, index) => (
+              <Box
+                key={index}
+                sx={{ display: "flex", alignItems: "center", mt: 2 }}
               >
-                Comment
-              </Button>
-
-              {post.comments.length > 0 &&
-                post.comments.map((comment, index) => (
-                  <Box
-                    key={index}
-                    sx={{ display: "flex", alignItems: "center", mt: 2 }}
-                  >
-                    <Avatar sx={{ mr: 2 }}>{comment.userId}</Avatar>
-                    <Box>
-                      <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                        {comment.comment}
-                      </Typography>
-                      <Typography variant="body2">
-                        {comment.commenter}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {new Date(comment.createdAt).toLocaleString()}
-                      </Typography>
-                    </Box>
-                  </Box>
-                ))}
-            </Box>
-          )}
-        </CardContent>
+                <Avatar sx={{ mr: 2 }}>{comment.userId}</Avatar>
+                <Box>
+                  <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                    {comment.comment}
+                  </Typography>
+                  <Typography variant="body2">
+                    {comment.commenter}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {new Date(comment.createdAt).toLocaleString()}
+                  </Typography>
+                </Box>
+              </Box>
+            ))}
+        </Box>
+      )}
+    </CardContent>:
+    <CardContent>
+        <Box textAlign="center" mt={5}>
+        <Typography variant="h4" color="#1b2e35">
+          Post Not Available
+        </Typography>
+      </Box>
+    </CardContent>
+    }
       </Card>
     </>
   );

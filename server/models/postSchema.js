@@ -14,6 +14,11 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    visibility: {
+        type: String,
+        enum: ["public", "private"],
+        default: "public"
+    },
     authorId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

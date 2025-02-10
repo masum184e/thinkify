@@ -76,7 +76,7 @@ const getSinglePost = async (req, res) => {
 
         const post = await PostModel.aggregate([
             {
-                $match: { _id: new mongoose.Types.ObjectId(postId) }
+                $match: { _id: new mongoose.Types.ObjectId(postId), visibility: "public" }
             },
             {
                 $lookup: {
@@ -247,4 +247,20 @@ const addReaction = async (req, res) => {
     }
 }
 
-export { addPost, removePost, editPost, getAllPost, getSinglePost, addComment, addReaction };
+const handleVisibility = async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const post = await PostModel.findById(postId);
+        const updatedPost = await PostModel.findByIdAndUpdate(postId, { visibility: post.visibility === "public" ? "private" : "public" })
+        if (updatedPost) {
+            res.status(200).json({ status: true, message: "Visibility Updated Successfully" });
+        } else {
+            res.status(500).json({ status: false, message: "Something Went Wrong" });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: "Internal Server Error" });
+    }
+}
+
+export { addPost, removePost, editPost, getAllPost, getSinglePost, addComment, addReaction, handleVisibility };

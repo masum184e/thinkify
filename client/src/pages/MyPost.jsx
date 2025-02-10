@@ -7,6 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -108,6 +109,50 @@ const MyPost = () => {
         : setAlertMessage(error.message);
     }
   };
+  const handleVisibility =async(postId)=>{
+    try {
+      setLoadingStatus(true);
+      const response = await axios.patch(
+        `${import.meta.env.VITE_SERVER_ENDPOINT}/posts/change-visibility/${postId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get(
+              import.meta.env.VITE_TOKEN_KEY
+            )}`,
+          },
+        }
+      );
+      if (response.data.status) {
+        setData((prevData) =>
+          prevData.map((post) =>
+            post._id === postId
+              ? { ...post, visibility: post.visibility === "public" ? "private" : "public" }
+              : post
+          )
+        );
+        setAlertBoxOpenStatus(true);
+        setAlertSeverity("success");
+        setAlertMessage(response.data.message);
+      } else {
+        setLoadingStatus(false);
+        console.log(response.data);
+        setAlertBoxOpenStatus(true);
+        setAlertSeverity("error");
+        setAlertMessage(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoadingStatus(false);
+      setAlertBoxOpenStatus(true);
+      setAlertSeverity("error");
+      setAlertMessage("Something Went Wrong");
+      // server error message with status code
+      error.response.data.message
+        ? setAlertMessage(error.response.data.message)
+        : setAlertMessage(error.message);
+    }
+  }
   return (
     <Box
       sx={{
@@ -129,16 +174,13 @@ const MyPost = () => {
               <TableCell sx={{ fontWeight: "bold", color: "white" }}>
                 Title
               </TableCell>
-              {/* <TableCell sx={{ fontWeight: "bold", color: "white" }}>
-                Like
+              <TableCell sx={{ fontWeight: "bold", color: "white", textAlign:"center" }}>
+                Reactions
               </TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "white" }}>
-                Dislike
+              <TableCell sx={{ fontWeight: "bold", color: "white", textAlign:"center" }}>
+                Comments
               </TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "white" }}>
-                Comment
-              </TableCell> */}
-              <TableCell sx={{ fontWeight: "bold", color: "white" }}>
+              <TableCell sx={{ fontWeight: "bold", color: "white", textAlign:"center" }}>
                 Visibility
               </TableCell>
               <TableCell sx={{ fontWeight: "bold", color: "white" }}>
@@ -158,11 +200,14 @@ const MyPost = () => {
                     {item.title}
                   </Link>
                 </TableCell>
-                {/* <TableCell>{item.likes ? item.likes : "0"}</TableCell> */}
-                {/* <TableCell>{item.dislikes ? item.dislikes : "0"}</TableCell> */}
-                {/* <TableCell>{item.comments ? item.comments : "0"}</TableCell> */}
-                <TableCell>
-                  <VisibilityOffIcon />
+                <TableCell sx={{ textAlign: "center" }} >
+                  {item.reactions.length ? item.reactions.length : "0"}
+                </TableCell>
+                <TableCell sx={{ textAlign: "center" }}>
+                  {item.comments.length ? item.comments.length : "0"}
+                </TableCell>
+                <TableCell sx={{ textAlign: "center" }}>
+                  {item.visibility == "private" ? <VisibilityOffIcon sx={{cursor:"pointer"}} onClick={()=>handleVisibility(item._id)} /> : <VisibilityIcon sx={{cursor:"pointer"}} onClick={()=>handleVisibility(item._id)} />}
                 </TableCell>
                 <TableCell>
                   <Box
