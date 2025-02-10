@@ -18,7 +18,7 @@ const generateActivityData = () => {
 
 const activityData = generateActivityData();
 
-const GitHubActivityGrid = () => {
+const ActivityGrid = () => {
   const weeks = [];
   let week = [];
 
@@ -146,4 +146,4 @@ const GitHubActivityGrid = () => {
   );
 };
 
-export default GitHubActivityGrid;
+export default ActivityGrid;

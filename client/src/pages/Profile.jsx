@@ -4,7 +4,7 @@ import ArticleIcon from "@mui/icons-material/Article";
 import TaskIcon from "@mui/icons-material/Task";
 
 import ProfileCardDetails from "../../components/profile/profile/ProfileCardDetails";
-import GitHubActivityGrid from "../../components/profile/profile/GitHubActivityGrid";
+import ActivityGrid from "../../components/profile/profile/ActivityGrid";
 
 const Profile = () => {
   return (
@@ -137,7 +137,7 @@ const Profile = () => {
       </Grid>
     </Grid>
 
-    <GitHubActivityGrid />
+    <ActivityGrid />
   
   </>
   );
