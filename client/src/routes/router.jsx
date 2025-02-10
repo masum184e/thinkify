@@ -19,6 +19,7 @@ import Post from "../pages/Post";
 import MyProduct from "../pages/MyProduct";
 import PublicRoute from "../layouts/PublicRoute";
 import Product from "../pages/Product";
+import Subscription from "../pages/Subscription";
 
 const router = createBrowserRouter([
   {
@@ -108,8 +109,10 @@ const router = createBrowserRouter([
         <Product />
       </PublicRoute>
     ),
-  },
-  {
+  },{
+path:"/subscription",
+element: <PublicRoute><Subscription /></PublicRoute>
+  },{
     path: "/dashboard",
     element: <AdminSideBar />,
     children: [
