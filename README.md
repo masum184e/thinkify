@@ -72,3 +72,46 @@ UPLOAD_DIRECTORY = uploads
 - Setting
   - Change Password
 - Sign Out
+
+# Contribute
+## Institution/Teacher
+- post(text, image)
+    - by admin/institution
+    - by teacher
+- assignments
+- poll
+- resource sharing
+- test
+### Design Idea
+|----------------------------------------------------------------
+|   Institution   |                                |  Analytics |
+|-----------------|                                |------------|
+|                 |          ----------            |  Teachers  |
+|-----------------|          | Create |            |  Students  |
+|                 |          ----------            |  Courses   |
+|-----------------|                                |    Posts   |
+|                 |                                |    ....    |
+|-----------------|--------------------------------|------------|
+### Assignments
+- title
+- description
+- subject
+- deadline
+- total marks
+- status
+- audience
+### Polls
+- title
+- description
+- type(singl, multiple)
+- options
+- deadline
+- status
+- anonymous member
+- audience
+### Resource
+- title
+- description
+- visibility
+- url
+- audience
