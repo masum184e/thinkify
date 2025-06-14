@@ -5,8 +5,12 @@ import TaskIcon from "@mui/icons-material/Task";
 
 import ProfileCardDetails from "../../components/profile/profile/ProfileCardDetails";
 import ActivityGrid from "../../components/profile/profile/ActivityGrid";
-
+import { useTheme } from '@mui/material/styles';
 const Profile = () => {
+
+   const theme = useTheme();
+
+
   return (
   <>
     <Grid container spacing={2}>
@@ -47,10 +51,15 @@ const Profile = () => {
                 padding: "15px",
                 fontSize: "20px",
                 fontWeight: "semibold",
-                backgroundColor: "white",
+                backgroundColor: (theme) =>
+  theme.palette.mode === 'light' ? 'white' : '#333',
+color: (theme) =>
+  theme.palette.mode === 'light' ? 'black' : 'white',
+
                 borderRadius: "50%",
                 textAlign: "center",
                 margin: "10px auto 0 auto",
+                
               }}
             >
               <Typography variant="span">45</Typography>
@@ -84,7 +93,11 @@ const Profile = () => {
                 padding: "15px",
                 fontSize: "20px",
                 fontWeight: "semibold",
-                backgroundColor: "white",
+               backgroundColor: (theme) =>
+  theme.palette.mode === 'light' ? 'white' : '#333',
+color: (theme) =>
+  theme.palette.mode === 'light' ? 'black' : 'white',
+
                 borderRadius: "50%",
                 textAlign: "center",
                 margin: "10px auto 0 auto",
@@ -121,7 +134,11 @@ const Profile = () => {
                 padding: "15px",
                 fontSize: "20px",
                 fontWeight: "semibold",
-                backgroundColor: "white",
+                backgroundColor: (theme) =>
+  theme.palette.mode === 'light' ? 'white' : '#333',
+color: (theme) =>
+  theme.palette.mode === 'light' ? 'black' : 'white',
+
                 borderRadius: "50%",
                 textAlign: "center",
                 margin: "10px auto 0 auto",

@@ -18,7 +18,7 @@ const Home = () => {
   }, []);
   return (
     <>
-      <NavBar />
+      <NavBar forceLoginText={true} />
       <Banner />
       <Features />
       <Newsletter />
