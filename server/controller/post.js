@@ -59,9 +59,20 @@ const editPost = async (req, res) => {
 
 const getAllPost = async (req, res) => {
     try {
-
+        const { limit, sort } = req.query;
         const authorId = req.user._id.toString();
-        const posts = await PostModel.find({ authorId });
+
+        let postsQuery = PostModel.find({ authorId });
+
+        if (sort === 'createdAt') {
+            postsQuery = postsQuery.sort({ createdAt: -1 });
+        }
+
+        if (limit) {
+            postsQuery = postsQuery.limit(parseInt(limit));
+        }
+
+        const posts = await postsQuery;
         res.status(200).json({ status: true, message: "Data Fetched Successfully", posts });
 
     } catch (error) {

@@ -80,9 +80,20 @@ const editProduct = async (req, res) => {
 
 const getAllProduct = async (req, res) => {
     try {
-
+        const { limit, sort } = req.query;
         const authorId = req.user._id.toString();
-        const products = await ProductModel.find({ authorId });
+
+        let productsQuery = ProductModel.find({ authorId });
+
+        if (sort === 'createdAt') {
+            productsQuery = productsQuery.sort({ createdAt: -1 });
+        }
+
+        if (limit) {
+            productsQuery = productsQuery.limit(parseInt(limit));
+        }
+
+        const products = await productsQuery;
         return res.status(200).json({ status: true, products });
 
     } catch (error) {

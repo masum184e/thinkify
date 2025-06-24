@@ -74,9 +74,15 @@ const editTask = async (req, res) => {
 
 const getAllTask = async (req, res) => {
     try {
-
+        const { taskStatus } = req.query;
         const authorId = req.user._id.toString();
-        const tasks = await TaskModel.find({ authorId });
+
+        const filter = { authorId };
+        if (taskStatus) {
+            filter.taskStatus = taskStatus;
+        }
+
+        const tasks = await TaskModel.find(filter);
         res.status(200).json({ status: true, message: "Data Fetched Successfully", tasks });
 
     } catch (error) {
