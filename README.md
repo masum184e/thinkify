@@ -73,26 +73,41 @@ UPLOAD_DIRECTORY = uploads
   - Change Password
 - Sign Out
 
-# Contribute
+# Contribution Ideas
+
+- Continue with Google signup/signin
+- Single Product Sell Page
+- View Task Details
+- View User Details(public)
+- Edit user, post, product
+- Loading View
+
 ## Institution/Teacher
+
 - post(text, image)
-    - by admin/institution
-    - by teacher
+  - by admin/institution
+  - by teacher
 - assignments
 - poll
 - resource sharing
 - test
+
 ### Design Idea
+
+```
 |----------------------------------------------------------------
-|   Institution   |                                |  Analytics |
+|                 |                                |  Analytics |
 |-----------------|                                |------------|
 |                 |          ----------            |  Teachers  |
 |-----------------|          | Create |            |  Students  |
-|                 |          ----------            |  Courses   |
+|   Institution   |          ----------            |  Courses   |
 |-----------------|                                |    Posts   |
 |                 |                                |    ....    |
 |-----------------|--------------------------------|------------|
+```
+
 ### Assignments
+
 - title
 - description
 - subject
@@ -100,7 +115,9 @@ UPLOAD_DIRECTORY = uploads
 - total marks
 - status
 - audience
+
 ### Polls
+
 - title
 - description
 - type(singl, multiple)
@@ -109,7 +126,9 @@ UPLOAD_DIRECTORY = uploads
 - status
 - anonymous member
 - audience
+
 ### Resource
+
 - title
 - description
 - visibility
