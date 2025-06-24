@@ -186,6 +186,151 @@ const getUsers = async (req, res) => {
     }
 }
 
+const getUserActivity = async (req, res) => {
+  try {
+    const { _id: userId } = req.user;
+
+    // Set duration for the past 365 days including today
+    const days = 371;
+    const today = new Date();
+    const startDate = new Date();
+    startDate.setDate(today.getDate() - (days - 1));
+
+    // Initialize activity map for each day
+    const activityMap = {};
+    for (let i = 0; i < days; i++) {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
+      const key = date.toISOString().split("T")[0];
+      activityMap[key] = 0;
+    }
+
+    const dateFilter = {
+      createdAt: {
+        $gte: startDate,
+        $lte: today,
+      },
+    };
+
+    const [
+      posts,
+      products,
+      tasksCreated,
+      updatedTasks,
+      commentsAgg,
+      reactionsAgg,
+      userDoc,
+    ] = await Promise.all([
+      PostModel.find({ authorId: userId, ...dateFilter }, "createdAt"),
+      ProductModel.find({ authorId: userId, ...dateFilter }, "createdAt"),
+      TaskModel.find({ authorId: userId, ...dateFilter }, "createdAt"),
+      TaskModel.find({
+        authorId: userId,
+        updatedAt: { $gte: startDate, $lte: today },
+      }, "updatedAt"),
+      PostModel.aggregate([
+        { $unwind: "$comments" },
+        {
+          $match: {
+            "comments.userId": userId,
+            "comments.createdAt": {
+              $gte: startDate,
+              $lte: today,
+            },
+          },
+        },
+        {
+          $project: {
+            date: {
+              $dateToString: {
+                format: "%Y-%m-%d",
+                date: "$comments.createdAt",
+              },
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "$date",
+            count: { $sum: 1 },
+          },
+        },
+      ]),
+      PostModel.aggregate([
+        { $unwind: "$reactions" },
+        {
+          $match: {
+            "reactions.userId": userId,
+            "reactions.createdAt": {
+              $gte: startDate,
+              $lte: today,
+            },
+          },
+        },
+        {
+          $project: {
+            date: {
+              $dateToString: {
+                format: "%Y-%m-%d",
+                date: "$reactions.createdAt",
+              },
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "$date",
+            count: { $sum: 1 },
+          },
+        },
+      ]),
+      UserModel.findById(userId),
+    ]);
+
+    // Count entries by their respective creation or update dates
+    const countByDate = (docs, dateField = "createdAt") => {
+      docs.forEach((doc) => {
+        const key = doc[dateField].toISOString().split("T")[0];
+        if (activityMap[key] !== undefined) activityMap[key]++;
+      });
+    };
+
+    countByDate(posts);
+    countByDate(products);
+    countByDate(tasksCreated);
+    countByDate(updatedTasks, "updatedAt");
+
+    commentsAgg.forEach(({ _id, count }) => {
+      if (activityMap[_id] !== undefined) activityMap[_id] += count;
+    });
+
+    reactionsAgg.forEach(({ _id, count }) => {
+      if (activityMap[_id] !== undefined) activityMap[_id] += count;
+    });
+
+    // Include registration date as one activity
+    if (userDoc) {
+      const createdKey = userDoc.createdAt.toISOString().split("T")[0];
+      if (activityMap[createdKey] !== undefined) activityMap[createdKey]++;
+    }
+
+    const userActivity = Object.entries(activityMap).map(([date, activity]) => ({
+      date,
+      activity,
+    }));
+
+    res
+      .status(200)
+      .json({ status: true, message: "Data Fetched Successfully", userActivity });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ status: false, message: "Internal Server Error" });
+  }
+};
+
+
 const removeUser = async (req, res) => {
     try {
         const { userId } = req.params;
@@ -207,4 +352,4 @@ const removeUser = async (req, res) => {
 
 }
 
-export { registration, login, getUserData, changePassword, getUsers, removeUser }
+export { registration, login, getUserData, changePassword, getUsers, removeUser, getUserActivity }

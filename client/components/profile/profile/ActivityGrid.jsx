@@ -1,24 +1,17 @@
 import { Container, Grid, Card } from "@mui/material";
-
-const generateActivityData = () => {
-  const startDate = new Date(2024, 0, 1);
-  const endDate = new Date(2024, 11, 31);
-  const data = [];
-  let currentDate = startDate;
-
-  while (currentDate <= endDate) {
-    data.push({
-      date: new Date(currentDate),
-      activity: Math.floor(Math.random() * 5),
-    });
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
-  return data;
-};
-
-const activityData = generateActivityData();
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import useThinkify from "../../../src/hooks/useThinkify";
 
 const ActivityGrid = () => {
+  const [activityData, setActivityData] = useState([]);
+  const {
+    setAlertBoxOpenStatus,
+    setAlertMessage,
+    setAlertSeverity,
+    setLoadingStatus,
+  } = useThinkify();
   const weeks = [];
   let week = [];
 
@@ -50,8 +43,51 @@ const ActivityGrid = () => {
 
   let lastMonth = -1;
 
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoadingStatus(true);
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_SERVER_ENDPOINT}/users/activity`,
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get(
+                import.meta.env.VITE_TOKEN_KEY
+              )}`,
+            },
+          }
+        );
+        if (response.data.status) {
+          const formattedData = response.data.userActivity.map((entry) => ({
+            date: new Date(entry.date),
+            activity: entry.activity,
+          })).sort((a, b) => a.date - b.date);
+          setActivityData(formattedData);
+        } else {
+          setLoadingStatus(false);
+          setAlertBoxOpenStatus(true);
+          setAlertSeverity(response.data.status ? "success" : "error");
+          setAlertMessage(response.data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoadingStatus(false);
+        setAlertBoxOpenStatus(true);
+        setAlertSeverity("error");
+        setAlertMessage("Something Went Wrong");
+        error.response.data.message
+          ? setAlertMessage(error.response.data.message)
+          : setAlertMessage(error.message);
+      } finally {
+        setLoadingStatus(false);
+      }
+    };
+    fetchData();
+    console.log(activityData);
+  }, []);
+
   return (
-    <Container maxWidth="lg" style={{ marginTop: "20px" }}  >
+    <Container maxWidth="lg" sx={{ margin: "30px auto" }}>
       <Grid container spacing={1} wrap="nowrap" alignItems="flex-start">
         <Grid
           item
