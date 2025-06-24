@@ -3,6 +3,9 @@ import { check, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
 
 import UserModel from "../models/userSchema.js"
+import PostModel from '../models/postSchema.js';
+import ProductModel from '../models/productSchema.js';
+import TaskModel from '../models/taskSchema.js';
 
 const registration = [
     check('fullName').matches(/^[a-zA-Z ]+$/).withMessage('Only alphabets and at least one space are allowed'),
@@ -89,7 +92,18 @@ const login = async (req, res) => {
 
 const getUserData = async (req, res) => {
     try {
-        res.status(200).json({ status: true, message: "Data Fetched Successfully", user: req.user });
+        const userId = req.user._id;
+
+        const totalPosts = await PostModel.countDocuments({ authorId: userId });
+        const totalProducts = await ProductModel.countDocuments({ authorId: userId });
+        const ongoingTasks = await TaskModel.countDocuments({ authorId: userId, taskStatus: 'ongoing' });
+
+        const user = req.user.toObject();
+        user.totalPosts = totalPosts;
+        user.totalProducts = totalProducts;
+        user.ongoingTasks = ongoingTasks;
+
+        res.status(200).json({ status: true, message: "Data Fetched Successfully", user });
     } catch (error) {
         console.error(error);
         res.status(500).json({ status: false, message: "Internal Server Error" });
