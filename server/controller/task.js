@@ -59,7 +59,7 @@ const editTask = async (req, res) => {
 
         const authorId = req.user._id.toString();
         const { taskId, taskStatus } = req.params;
-        const updatedTask = await TaskModel.findOneAndUpdate({ authorId, _id: taskId }, { $set: { taskStatus } }, { new: true });
+        const updatedTask = await TaskModel.findOneAndUpdate({ authorId, _id: taskId }, { $set: { taskStatus, updatedAt: new Date(), } }, { new: true });
         if (updatedTask.taskStatus === taskStatus) {
             res.status(200).json({ status: true, message: "Task Status Updated Successfully" });
         } else {
