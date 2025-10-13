@@ -127,39 +127,52 @@ const getUserData = async (req, res) => {
 
 // }
 
-const changePassword = async (req, res) => {
+const changePassword = [
+  // validate fields and password strength
+  check('oldPassword').notEmpty().withMessage('Old password is required'),
+  check('newPassword')
+    .notEmpty()
+    .withMessage('New password is required')
+    .isLength({ min: 8 })
+    .withMessage('Password must be at least 8 characters long')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).*$/)
+    .withMessage('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
+  async (req, res) => {
     try {
-        const { oldPassword, newPassword } = req.body;
-        if (!oldPassword || !newPassword) {
-            return res.status(400).json({ status: false, message: "All fields are required" });
-        }
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ status: false, message: errors.array()[0].msg });
+      }
 
-        const existingUser = await UserModel.findById(req.user._id);
-        if (!existingUser) {
-            return res.status(401).json({ status: false, message: "User does not exist" });
-        }
+      const { oldPassword, newPassword } = req.body;
 
-        const isMatch = await bcrypt.compare(oldPassword, existingUser.password);
-        if (!isMatch) {
-            return res.status(401).json({ status: false, message: "Wrong Password" });
-        }
+      const existingUser = await UserModel.findById(req.user._id);
+      if (!existingUser) {
+        return res.status(401).json({ status: false, message: "User does not exist" });
+      }
 
-        const bcryptSaltRounds = parseInt(process.env.BCRYPT_GEN_SALT_NUMBER);
-        const bcryptSalt = await bcrypt.genSalt(bcryptSaltRounds);
-        const hashPassword = await bcrypt.hash(newPassword, bcryptSalt);
+      const isMatch = await bcrypt.compare(oldPassword, existingUser.password);
+      if (!isMatch) {
+        return res.status(401).json({ status: false, message: "Wrong Password" });
+      }
 
-        const updatedUser = await UserModel.findByIdAndUpdate(req.user._id, { password: hashPassword }, { new: true });
-        if (updatedUser) {
-            res.status(200).json({ status: true, message: "Password Changed Successfully" });
-        } else {
-            res.status(500).json({ status: false, message: "Something Went Wrong" });
-        }
+      const bcryptSaltRounds = parseInt(process.env.BCRYPT_GEN_SALT_NUMBER);
+      const bcryptSalt = await bcrypt.genSalt(bcryptSaltRounds);
+      const hashPassword = await bcrypt.hash(newPassword, bcryptSalt);
+
+      const updatedUser = await UserModel.findByIdAndUpdate(req.user._id, { password: hashPassword }, { new: true });
+      if (updatedUser) {
+        res.status(200).json({ status: true, message: "Password Changed Successfully" });
+      } else {
+        res.status(500).json({ status: false, message: "Something Went Wrong" });
+      }
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ status: false, message: "Internal Server Error" });
+      console.error(error);
+      res.status(500).json({ status: false, message: "Internal Server Error" });
     }
-}
+  }
+];
 
 const getUsers = async (req, res) => {
     try {
