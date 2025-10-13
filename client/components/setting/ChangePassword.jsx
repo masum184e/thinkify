@@ -68,7 +68,9 @@ const ChangePassword = () => {
   };
 
   const validateNewPassword = (value) => {
-    return value.length >= 8 || "Password must be at least 8 characters long";
+    if (!value || value.length < 8) return "Password must be at least 8 characters long";
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+    return regex.test(value) || "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character";
   };
 
   const validateRetypePassword = (value) => {
